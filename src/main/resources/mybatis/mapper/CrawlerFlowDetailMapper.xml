@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pab.framework.crawlerdb.dao.CrawlerFlowDetailDao">
+    <select id="findAll" resultType="com.pab.framework.crawlerdb.domain.CrawlerFlowDetail" parameterType="int">
+        select flow_id, action_id,order_num from crawler_flow_detail order by order_num
+    </select>
+    <select id="findAllByFlowId" resultType="com.pab.framework.crawlerdb.domain.CrawlerFlowDetail" parameterType="int">
+        select flow_id, action_id,order_num from crawler_flow_detail where flow_id=#{flow_id} order by order_num
+    </select>
+
+</mapper>

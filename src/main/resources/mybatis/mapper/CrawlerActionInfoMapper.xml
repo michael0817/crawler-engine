@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pab.framework.crawlerdb.dao.CrawlerActionInfoDao">
+<select id="findOneByActionById" resultType="com.pab.framework.crawlerdb.domain.CrawlerActionInfo" parameterType="int">
+    select action_id, action_desc, action_type, url_type, url_addr, base_url_addr, crawler_regex from crawler_action_info
+    <where>action_id=#{action_id}</where>
+</select>
+</mapper>
+
+
