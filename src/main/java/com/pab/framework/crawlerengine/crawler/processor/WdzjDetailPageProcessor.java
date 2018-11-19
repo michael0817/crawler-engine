@@ -1,5 +1,8 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -29,13 +32,11 @@ public class WdzjDetailPageProcessor implements PageProcessor {
         Html html = page.getHtml();
         String title=html.xpath("h1[@class='page-title']/text()").get();
         list.add(title);
-        String source=html.xpath("div[@class='page-time']/span[1]/text(1)").get();
-        String sourceValue=html.xpath("div[@class='page-time']/span/em/text()").get();
-        String _=html.xpath("div[@class='page-time']/text(2)").get();
-        String auhtor=html.xpath("div[@class='page-time']/span[2]/text(1)").get();
-        String auhtorValue=html.xpath("div[@class='page-time']/span[2]/em/text(1)").get();
-        String time=html.xpath("div[@class='page-time']/span[3]/text()").get();
-        list.add(source+sourceValue+" "+_+auhtor+auhtorValue+" "+_+time);
+        Document document = html.getDocument();
+        Elements elements = document.getElementsByAttributeValue("class","page-time");
+        for (Element element : elements) {
+            list.add(element.text());
+        }
         String t = html.xpath("div[@class='page-summary']/span[@class='t']/text()").get();
         list.add(t);
         String  summary= html.xpath("div[@class='page-summary']/div/text()").get();
