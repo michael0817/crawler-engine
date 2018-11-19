@@ -41,9 +41,9 @@ public class CbrcDetailPageProcessor implements PageProcessor {
             page.setSkip(true);
         }
         String docTitle = html.xpath("div[@id='docTitle']/div/text()").get();
-        docTitle= StringEscapeUtils.unescapeHtml(docTitle);
         docTitle=StringUtils.trimToNull(docTitle);
         if (docTitle!=null){
+            docTitle= StringEscapeUtils.unescapeHtml(docTitle);
             list.add(docTitle);
         }
         Document document = html.getDocument();
