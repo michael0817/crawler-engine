@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.nodes.Document;
@@ -7,10 +8,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,11 +63,11 @@ public class CbrcDetailPageProcessor implements PageProcessor {
             for (int j = 0; j < length; j++) {
                 mso= msos.get(j);
                 text=mso.text();
-                text=StringEscapeUtils.unescapeHtml(text);
                 text= StringUtils.trimToNull(text);
                 if (text!=null){
+                    text=StringEscapeUtils.unescapeHtml(text);
                     builder.append(text);
-                    builder.append(" ");
+
                 }
             }
             list.add(builder.toString());
@@ -74,6 +78,17 @@ public class CbrcDetailPageProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public static void main(String[] args) throws IOException {
+        CbrcDetailPageProcessor processor=new CbrcDetailPageProcessor();
+        Spider spider= Spider.create(processor).addUrl("http://www.cbrc.gov.cn/chinese/newShouDoc/6AE01C768AE54014B66A390E37CB9E6D.html");
+        spider.run();
+        if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
+                File file=new File("D:\\idea\\.IntelliJIdea2018.2\\log\\threadDump-20181116-222326.txt");
+             FileUtils.writeLines(file,processor.getList());
+        }
+
     }
 
 }
