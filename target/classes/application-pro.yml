@@ -1,7 +1,7 @@
 logging:
   level:
     root: error
-    com.bootdo: info
+    com.pab.framework: info
 spring:
   datasource:
     crawler:
