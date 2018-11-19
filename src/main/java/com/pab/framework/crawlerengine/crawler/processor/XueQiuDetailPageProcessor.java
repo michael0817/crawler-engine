@@ -32,7 +32,6 @@ public class XueQiuDetailPageProcessor implements PageProcessor {
         list.add(time);
         String article__bd__title=html.xpath("h1[@class='article__bd__title']/text()").get();
         list.add(article__bd__title);
-        //article__bd__detail
         List<String> strings=html.xpath("div[@class='article__bd__detail']/p/text()").all();
         for (String string : strings) {
             string=string.trim();
