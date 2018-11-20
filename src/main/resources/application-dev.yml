@@ -6,10 +6,10 @@ spring:
   datasource:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/crawler_db?useUnicode=true&characterEncoding=utf8
-      username: root
-      password: root
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
+      username: crawler
+      password: Crawler123!
       initialSize: 1
       minIdle: 3
       maxActive: 20
