@@ -2,9 +2,9 @@ package com.pab.framework.crawlerengine.crawler.processor;
 
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selectable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,22 +22,30 @@ public class DetailUrlsPageProcessor implements PageProcessor {
         return list;
     }
 
+
     @Override
     public void process(Page page) {
 
         page.setCharset("utf-8");
         Html html = page.getHtml();
-        String regex = "http://www.cbrc.gov.cn/chinese/newShouDoc/\\w+.html";
-        Selectable xpath = html.links().regex(regex);
-        if (xpath.match()) {
-            list.addAll(xpath.all());
+        List<String> all = html.xpath("a[@title]").all();
+        for (int i = 0; i < all.size(); i++) {
+            list.add(all.get(i));
         }
     }
-
 
     @Override
     public Site getSite() {
         return site;
+    }
+
+    public static void main(String[] args) {
+        DetailUrlsPageProcessor process=new DetailUrlsPageProcessor();
+        Spider spider=Spider.create(process).addUrl("http://www.cbrc.gov.cn/chinese/newListDoc/111003/1.html");
+        spider.run();
+        if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
+            System.out.println(process.getList());
+        }
     }
 
 }
