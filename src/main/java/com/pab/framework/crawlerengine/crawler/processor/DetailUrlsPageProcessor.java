@@ -41,7 +41,7 @@ public class DetailUrlsPageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         DetailUrlsPageProcessor process=new DetailUrlsPageProcessor();
-        Spider spider=Spider.create(process).addUrl("http://www.cbrc.gov.cn/chinese/newListDoc/111003/1.html");
+        Spider spider=Spider.create(process).addUrl("");
         spider.run();
         if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
             System.out.println(process.getList());
