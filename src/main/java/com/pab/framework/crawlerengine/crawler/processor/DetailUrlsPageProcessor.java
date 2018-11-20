@@ -7,7 +7,9 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author code4crafter@gmail.com <br>
@@ -22,14 +24,23 @@ public class DetailUrlsPageProcessor implements PageProcessor {
         return list;
     }
 
+    private String regex;
+
+    public void setRegex(String regex) {
+        this.regex = regex;
+    }
 
     @Override
     public void process(Page page) {
-
         page.setCharset("utf-8");
         Html html = page.getHtml();
-        List<String> all = html.xpath("a[@title]").all();
-        for (int i = 0; i < all.size(); i++) {
+        List<String> all = html.links().regex(regex).all();
+        Set<String> set = new HashSet<String>();
+        set.addAll(all);
+        all.clear();
+        all.addAll(set);
+        int size = all.size();
+        for (int i = 0; i < size; i++) {
             list.add(all.get(i));
         }
     }
@@ -38,13 +49,24 @@ public class DetailUrlsPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-
-    public static void main(String[] args) {
-        DetailUrlsPageProcessor process=new DetailUrlsPageProcessor();
-        Spider spider=Spider.create(process).addUrl("");
+    /**
+     * /chinese/newShouDoc/\w+.html
+     * /nifa/\d+/\d+/\d+/index.html
+     * /nifa/\d+/\d+/\d+/index.html|http://www.pbc.gov.cn/goutongjiaoliu/\d+/\d+/\d+/index.html
+     * http://www.51kaxun.com/news/13\d{3}.html
+     * //www.wdzj.com/news/yc/343\d{2}1\d{1}.html
+     * /Detail/report?id=\d+&amp;isfree=\d+
+     *
+     *  http://www.bugutime.com/news/\d+.html
+     * @param args
+     */
+    public static void main(String[] args) throws InterruptedException {
+        DetailUrlsPageProcessor process = new DetailUrlsPageProcessor();
+        process.setRegex("\\d+");
+        Spider spider = Spider.create(process).addUrl("https://xueqiu.com/u/7558914709");
         spider.run();
-        if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
-            System.out.println(process.getList());
+        if (spider.getStatus().compareTo(Spider.Status.Stopped) == 0) {
+            // System.out.println(process.getList());
         }
     }
 
