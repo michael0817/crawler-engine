@@ -70,7 +70,9 @@ public class NifaDetailPageProcessor implements PageProcessor {
 
     public static void main(String[] args) {
         NifaDetailPageProcessor process=new NifaDetailPageProcessor();
-        Spider spider=Spider.create(process).addUrl("http://www.nifa.org.cn/nifa/2955675/2955761/2975586/index.html");
+        //http://www.nifa.org.cn/nifa/2955686/2955720/2971011/index.html 政策法规
+        //http://www.nifa.org.cn/nifa/2961652/2961654/2976355/index.html 时政要闻
+        Spider spider=Spider.create(process).addUrl("http://www.nifa.org.cn/nifa/2961652/2961656/2976303/index.html");
         spider.run();
         if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
             System.out.println(process.getList());

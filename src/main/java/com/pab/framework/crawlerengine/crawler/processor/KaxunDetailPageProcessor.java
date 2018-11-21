@@ -50,7 +50,7 @@ public class KaxunDetailPageProcessor implements PageProcessor {
     public static void main(String[] args) {
         KaxunDetailPageProcessor process = new KaxunDetailPageProcessor();
         //http://www.51kaxun.com/news/13433.html
-        Spider spider = Spider.create(process).addUrl("http://www.51kaxun.com/news/13433.html");
+        Spider spider = Spider.create(process).addUrl("http://www.51kaxun.com/news/13428.html");
         spider.run();
         if (spider.getStatus().compareTo(Spider.Status.Stopped) == 0) {
             System.out.println(process.getList());
