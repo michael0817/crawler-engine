@@ -13,7 +13,7 @@ import java.util.List;
  * @since 0.6.0
  */
 public class IresearchDetailUrls {
-
+//http://www.iresearch.com.cn/Detail/report?id=3293&isfree=0
     //http://www.iresearch.com.cn/report.shtml
     public static void main(String[] args) throws InterruptedException {
         IresearchDetailUrls detailUrls = new IresearchDetailUrls();
