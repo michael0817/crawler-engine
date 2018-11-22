@@ -5,7 +5,9 @@ import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
+import us.codecraft.webmagic.selector.Selectable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,39 +15,41 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.6.0
  */
-public class IresearchDetailPageProcessor implements PageProcessor {
-
-    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
-    private List<String> list = new ArrayList<String>();
+public class IresearchDetailPageProcessor  implements PageProcessor {
+    private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(10000);
+    private List<String> list=new ArrayList<String>();
 
     public List<String> getList() {
         return list;
     }
-
     @Override
     public void process(Page page) {
         page.setCharset("utf-8");
         Html html = page.getHtml();
-        String tit = html.xpath("h1[@class='tit']/text()").get();
+        String tit=html.xpath("h1[@class='tit']/text()").get();
         list.add(tit);
-        String report = html.xpath("div[@class='m-report-lead']/p/text()").get();
+        Selectable xpath = html.xpath("div[@class='info']/span/text()");
+        List<String> strings = xpath.all();
+        list.add(strings.get(0)+strings.get(1)+" "+strings.get(2));
+        String report=html.xpath("div[@class='m-report-lead']/p/text()").get();
         list.add(report);
-
     }
-
 
     @Override
     public Site getSite() {
         return site;
     }
 
-    public static void main(String[] args) {
-        IresearchDetailPageProcessor pageProcessor = new IresearchDetailPageProcessor();
-        Spider spider = Spider.create(pageProcessor).addUrl("http://www.iresearch.com.cn/Detail/report?id=3296&isfree=0");
+    public static void main(String[] args) throws IOException {
+        IresearchDetailPageProcessor processor=new IresearchDetailPageProcessor();
+        Spider spider= Spider.create(processor).addUrl("http://www.iresearch.com.cn/Detail/report?id=3293&isfree=0");
         spider.run();
-        if (spider.getStatus().compareTo(Spider.Status.Stopped) == 0) {
-            System.out.println(pageProcessor.list);
+        if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
+            processor.list.forEach(str->{
+                System.out.println(str);
+            });
         }
+
     }
 
 }
