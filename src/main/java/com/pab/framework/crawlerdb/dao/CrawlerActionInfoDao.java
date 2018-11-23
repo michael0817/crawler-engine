@@ -4,5 +4,5 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 
 
 public interface CrawlerActionInfoDao {
- CrawlerActionInfo findOneByActionById(int flow_id);;
+ CrawlerActionInfo findOneByActionById(int flowId);
 }
