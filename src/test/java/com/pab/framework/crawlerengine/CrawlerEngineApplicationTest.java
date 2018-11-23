@@ -9,14 +9,15 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class CrawlerEngineApplicationTests {
+public class CrawlerEngineApplicationTest {
 
     @Autowired
     CrawlerNewsMilestoneDao crawlerNewsMilestoneDao;
 
     @Test
     public void contextLoads() {
-        crawlerNewsMilestoneDao.findUrlAddrsByCrawl();
+
+        System.out.println( crawlerNewsMilestoneDao.findUrlAddrsByCrawl() );
     }
 
 }
