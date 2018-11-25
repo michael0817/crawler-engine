@@ -5,49 +5,49 @@ package com.pab.framework.crawlerdb.domain;
  */
 public class CrawActionDynamicInfo {
 
-    private  int dyn_action_id;
-    private  int action_id;
-    private int action_type;
-    private  int url_type;
-    private String url_addr;
+    private Integer dynActionId;
+    private Integer actionId;
+    private Integer actionType;
+    private Integer urlType;
+    private String  urlAddr;
 
-    public int getDyn_action_id() {
-        return dyn_action_id;
+    public Integer getDynActionId() {
+        return dynActionId;
     }
 
-    public void setDyn_action_id(int dyn_action_id) {
-        this.dyn_action_id = dyn_action_id;
+    public void setDynActionId(Integer dynActionId) {
+        this.dynActionId = dynActionId;
     }
 
-    public int getAction_id() {
-        return action_id;
+    public Integer getActionId() {
+        return actionId;
     }
 
-    public void setAction_id(int action_id) {
-        this.action_id = action_id;
+    public void setActionId(Integer actionId) {
+        this.actionId = actionId;
     }
 
-    public int getAction_type() {
-        return action_type;
+    public Integer getActionType() {
+        return actionType;
     }
 
-    public void setAction_type(int action_type) {
-        this.action_type = action_type;
+    public void setActionType(Integer actionType) {
+        this.actionType = actionType;
     }
 
-    public int getUrl_type() {
-        return url_type;
+    public Integer getUrlType() {
+        return urlType;
     }
 
-    public void setUrl_type(int url_type) {
-        this.url_type = url_type;
+    public void setUrlType(Integer urlType) {
+        this.urlType = urlType;
     }
 
-    public String getUrl_addr() {
-        return url_addr;
+    public String getUrlAddr() {
+        return urlAddr;
     }
 
-    public void setUrl_addr(String url_addr) {
-        this.url_addr = url_addr;
+    public void setUrlAddr(String urlAddr) {
+        this.urlAddr = urlAddr;
     }
 }

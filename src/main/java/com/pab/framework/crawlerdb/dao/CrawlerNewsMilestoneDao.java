@@ -5,12 +5,10 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-/**
- * Created by fando on 2018/11/4 18:02
- */
+@Mapper
 public interface CrawlerNewsMilestoneDao {
    int insertAll(CrawlerNewsMilestone crawlerNewsMilestone);
-   List<String> findUrlAddrsByNewDate(int action_id);
+   List<String> findUrlAddrsByNewDate(Integer actionId);
    int  isExistsUrl(CrawlerNewsMilestone crawlerNewsMilestone);
    List<String> findUrlAddrsByCrawl();
 }

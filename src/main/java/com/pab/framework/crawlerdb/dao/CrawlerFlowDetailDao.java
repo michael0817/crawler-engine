@@ -1,14 +1,13 @@
 package com.pab.framework.crawlerdb.dao;
 
 import com.pab.framework.crawlerdb.domain.CrawlerFlowDetail;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-/**
- * Created by fando on 2018/11/5 17:27
- */
 
+@Mapper
 public interface CrawlerFlowDetailDao {
     List<CrawlerFlowDetail> findAll();
-    List<CrawlerFlowDetail> findAllByFlowId(int flow_id);
+    List<CrawlerFlowDetail> findAllByFlowId(Integer flowId);
 }
