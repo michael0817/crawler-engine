@@ -1,9 +1,11 @@
 package com.pab.framework.crawlerdb.domain;
 
+import com.pab.framework.crawlerdb.common.BaseEntity;
+
 /**
  * Created by fando on 2018/11/4 17:00
  */
-public class CrawActionDynamicInfo {
+public class CrawerActionDynamicInfo extends BaseEntity {
 
     private Integer dynActionId;
     private Integer actionId;

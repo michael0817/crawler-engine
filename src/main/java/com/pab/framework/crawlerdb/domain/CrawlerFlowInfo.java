@@ -1,9 +1,11 @@
 package com.pab.framework.crawlerdb.domain;
 
+import com.pab.framework.crawlerdb.common.BaseEntity;
+
 /**
  * Created by fando on 2018/11/5 17:17
  */
-public class CrawlerFlowInfo {
+public class CrawlerFlowInfo extends BaseEntity {
 
     private Integer flowId;
     private  String flowDesc;

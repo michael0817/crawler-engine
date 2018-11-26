@@ -1,11 +1,13 @@
 package com.pab.framework.crawlerdb.domain;
 
+import com.pab.framework.crawlerdb.common.BaseEntity;
+
 import java.util.Date;
 
 /**
  * Created by fando on 2018/11/4 18:00
  */
-public class CrawlerNewsMilestone {
+public class CrawlerNewsMilestone extends BaseEntity {
     private  Integer actionId;
     private String urlAddr;
     private Date crawlerDate;
