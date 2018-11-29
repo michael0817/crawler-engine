@@ -15,8 +15,4 @@
             crawler_news_milestone)
         </where>
     </select>
-    <select id="findUrlAddrsByCrawl"  resultType="string">
-      select a.url_addr url_addr from  crawler_news_milestone a join crawler_action_dynamic_info b on a.action_id=b.action_id
-      where a.url_addr=b.url_addr order by crawler_date desc
-    </select>
 </mapper>

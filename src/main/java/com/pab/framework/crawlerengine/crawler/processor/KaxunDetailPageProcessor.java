@@ -1,6 +1,7 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -14,6 +15,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.3.2
  */
+@Component
 public class KaxunDetailPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(10000);
@@ -27,11 +29,10 @@ public class KaxunDetailPageProcessor implements PageProcessor {
     public void process(Page page) {
         page.setCharset("utf-8");
         Html html = page.getHtml();
-        String tit = html.xpath("h1[@class='nr01_tit']//text()").get();
+        String tit = html.xpath("h1[@class='nr01_tit']/text()").get();
         list.add(tit);
         String right01_date = html.xpath("p[@class='right01_date']/text(2)").get();
         list.add(right01_date);
-        String right01_nr=html.xpath("div[@class='right01_nr']").get();
         List<String> strings=html.xpath("div[@class='right01_nr']/text()").all();
         int size = strings.size();
         String string;

@@ -24,7 +24,7 @@ import java.sql.SQLException;
 @MapperScan(basePackages = CrawlerDBConfig.PACKAGE, sqlSessionFactoryRef = "crawlerSqlSessionFactory")
 public class CrawlerDBConfig {
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    static final String PACKAGE = "com.pab.framework.crawleredb.dao";
+    static final String PACKAGE = "com.pab.framework.crawlerdb.dao";
     static final String MAPPER_LOCATION = "classpath*:mybatis/**/*.xml";
     static final String DOMAIN_PACKAGE = "com.pab.framework.crawlerdb.domain";
 

@@ -10,5 +10,5 @@ public interface CrawlerNewsMilestoneDao {
    int insertAll(CrawlerNewsMilestone crawlerNewsMilestone);
    List<String> findUrlAddrsByNewDate(Integer actionId);
    int  isExistsUrl(CrawlerNewsMilestone crawlerNewsMilestone);
-   List<String> findUrlAddrsByCrawl();
+
 }

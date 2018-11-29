@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
+import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
@@ -15,6 +16,7 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.6.0
  */
+@Component
 public class IresearchDetailPageProcessor  implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(10000);
     private List<String> list=new ArrayList<String>();
@@ -42,7 +44,7 @@ public class IresearchDetailPageProcessor  implements PageProcessor {
 
     public static void main(String[] args) throws IOException {
         IresearchDetailPageProcessor processor=new IresearchDetailPageProcessor();
-        Spider spider= Spider.create(processor).addUrl("http://www.iresearch.com.cn/Detail/report?id=3293&isfree=0");
+        Spider spider= Spider.create(processor).addUrl("https://www.analysys.cn/article/analysis/detail/20018996");
         spider.run();
         if (spider.getStatus().compareTo(Spider.Status.Stopped)==0){
             processor.list.forEach(str->{

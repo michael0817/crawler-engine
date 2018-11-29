@@ -1,15 +1,12 @@
 package com.pab.framework.crawlerengine;
 
 import org.mybatis.spring.annotation.MapperScan;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @SpringBootApplication
@@ -17,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan("com.pab.framework.**.*")
 @EnableCaching
 public class CrawlerEngineApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(CrawlerEngineApplication.class, args);
     }
