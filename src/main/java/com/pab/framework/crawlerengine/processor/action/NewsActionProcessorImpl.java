@@ -12,6 +12,7 @@ import com.pab.framework.crawlerengine.crawler.processor.DatePageProcessor;
 import com.pab.framework.crawlerengine.crawler.processor.DetailUrlsPageProcessor;
 import com.pab.framework.crawlerengine.crawler.processor.TitlePageProcessor;
 import com.pab.framework.crawlerengine.crawler.util.CrawlerUtil;
+import com.pab.framework.crawlerengine.crawler.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +21,6 @@ import org.springframework.stereotype.Component;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author xumx
@@ -55,12 +54,7 @@ public class NewsActionProcessorImpl implements ActionProcessor {
                 String crawlerRegex = crawlerActionInfo.getCrawlerRegex();
                 urlAddr = crawlerActionInfo.getUrlAddr();
                 int index = 1;
-                Pattern pattern= Pattern.compile("\\d+}");
-                Matcher matcher = pattern.matcher(urlAddr);
-                if (matcher.find()){
-                    String group = matcher.group();
-                    index= Integer.parseInt(group.substring(0, group.length()-1));
-                }
+                index = UrlUtils.maxPage(urlAddr);
                 String prefix = urlAddr.substring(0, urlAddr.indexOf("{"));
                 String suffix = urlAddr.substring(urlAddr.indexOf("}") + 1);
                 detailUrlsPageProcessor.setRegex(crawlerRegex);
@@ -78,9 +72,9 @@ public class NewsActionProcessorImpl implements ActionProcessor {
                 List<String> urlAddrs = detailUrlsPageProcessor.getList();
                 CrawlerArticle crawlerArticle;
                 List<CrawlerArticle> crawlerArticles = new ArrayList<>();
-                int size=1;
+                int size = 1;
                 if (urlAddrs != null) {
-                    size=urlAddrs.size();
+                    size = urlAddrs.size();
                     for (int i = 0; i < size; i++) {
                         crawerActionDynamicInfo = new CrawerActionDynamicInfo();
                         crawerActionDynamicInfo.setActionId(actionId);
@@ -102,24 +96,23 @@ public class NewsActionProcessorImpl implements ActionProcessor {
                 String date = null;
                 String content = null;
                 if (urlAddrs != null) {
-                    size=urlAddrs.size();
+                    size = urlAddrs.size();
                     for (int i = 0; i < size; i++) {
                         crawlerArticle = new CrawlerArticle();
-                        if (urlAddrs.get(i).startsWith(baseUrlAddr)){
+                        if (urlAddrs.get(i).startsWith(baseUrlAddr)) {
                             titlePageProcessor.process(urlAddrs.get(i));
                             datePageProcessor.process(urlAddrs.get(i));
                             contentPageProcessor.process(urlAddrs.get(i));
-                        }
-                        else{
+                        } else {
                             titlePageProcessor.process(baseUrlAddr + urlAddrs.get(i));
                             datePageProcessor.process(baseUrlAddr + urlAddrs.get(i));
-                            contentPageProcessor.process(baseUrlAddr +urlAddrs.get(i));
+                            contentPageProcessor.process(baseUrlAddr + urlAddrs.get(i));
                         }
-                        title=titlePageProcessor.getTitle();
+                        title = titlePageProcessor.getTitle();
                         if (title != null) {
                             crawlerArticle.setTitle(title);
                         }
-                        date=datePageProcessor.getDate();
+                        date = datePageProcessor.getDate();
                         if (date != null) {
                             crawlerArticle.setDate(date);
                         }
@@ -127,14 +120,14 @@ public class NewsActionProcessorImpl implements ActionProcessor {
                         if (content != null) {
                             crawlerArticle.setContent(content);
                         }
-                        if (title!=null&&content!=null){
+                        if (title != null && content != null) {
                             crawlerArticles.add(crawlerArticle);
                         }
                     }
                     for (CrawlerArticle article : crawlerArticles) {
-                        logger.info("title={}",article.getTitle());
-                        logger.info("date={}",article.getDate());
-                        logger.info("content={}",article.getContent());
+                        logger.info("title={}", article.getTitle());
+                        logger.info("date={}", article.getDate());
+                        logger.info("content={}", article.getContent());
                     }
                 }
                 break;

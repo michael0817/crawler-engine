@@ -1,5 +1,8 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.pab.framework.crawlerengine.crawler.util.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -9,6 +12,7 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -36,9 +40,29 @@ public class DetailUrlsPageProcessor implements PageProcessor {
     public void process(Page page) {
         page.setCharset("utf-8");
         String rawText = page.getRawText();
+        String url=page.getUrl().get();
         if (rawText.startsWith("{") || rawText.startsWith("[")) {
-            list.add(page.getUrl().get());
-        } else {
+            list.add(url);
+        }
+
+        else if (url.contains("https://xueqiu.com/u/7558914709")){
+            String path = System.getProperty("user.dir");
+            path = path + "/src/main/resources/xueqiu.json";
+            String json = null;
+            try {
+                json = FileUtils.getJson(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            JSONObject jsonObject = JSONObject.parseObject(json);
+            JSONArray statuses = jsonObject.getJSONArray("statuses");
+            int maxPage= Integer.parseInt(url.substring(url.indexOf("?")+1));
+            for (int i = 0; i < maxPage; i++) {
+                list.add(  statuses.getJSONObject(i).getString("target"));
+            }
+
+        }
+        else {
             Html html = page.getHtml();
             Selectable links = html.links();
             List<String> all = null;

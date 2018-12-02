@@ -4,6 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +13,9 @@ import java.util.List;
  * @author code4crafter@gmail.com <br>
  * @since 0.6.0
  */
+@Component
 public class IresearchDetailUrls {
-//http://www.iresearch.com.cn/Detail/report?id=3293&isfree=0
+
     //http://www.iresearch.com.cn/report.shtml
     public static void main(String[] args) throws InterruptedException {
         IresearchDetailUrls detailUrls = new IresearchDetailUrls();
@@ -26,7 +28,7 @@ public class IresearchDetailUrls {
     }
 
     public List<String> getUrls(String base_url_addr, String url_addr) throws InterruptedException {
-        System.setProperty("webdriver.chrome.driver", "src/main/resources/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "webmagic-selenium/src/main/resources/chromedriver.exe");
         WebDriver webDriver = new ChromeDriver();
         webDriver.get(base_url_addr + url_addr);
         Thread.sleep(2000);
