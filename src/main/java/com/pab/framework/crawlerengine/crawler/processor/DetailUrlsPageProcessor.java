@@ -1,8 +1,5 @@
 package com.pab.framework.crawlerengine.crawler.processor;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.pab.framework.crawlerengine.crawler.util.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
@@ -12,7 +9,6 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -43,24 +39,6 @@ public class DetailUrlsPageProcessor implements PageProcessor {
         String url=page.getUrl().get();
         if (rawText.startsWith("{") || rawText.startsWith("[")) {
             list.add(url);
-        }
-
-        else if (url.contains("https://xueqiu.com/u/7558914709")){
-            String path = System.getProperty("user.dir");
-            path = path + "/src/main/resources/xueqiu.json";
-            String json = null;
-            try {
-                json = FileUtils.getJson(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            JSONObject jsonObject = JSONObject.parseObject(json);
-            JSONArray statuses = jsonObject.getJSONArray("statuses");
-            int maxPage= Integer.parseInt(url.substring(url.indexOf("?")+1));
-            for (int i = 0; i < maxPage; i++) {
-                list.add(  statuses.getJSONObject(i).getString("target"));
-            }
-
         }
         else {
             Html html = page.getHtml();
@@ -107,16 +85,5 @@ public class DetailUrlsPageProcessor implements PageProcessor {
      *
      * @param args
      */
-    public static void main(String[] args) throws InterruptedException {
-        DetailUrlsPageProcessor process = new DetailUrlsPageProcessor();
-        process.setRegex("/news/13\\d{3}.html");
-        Spider spider = Spider.create(process).addUrl("http://www.51kaxun.com/news/search.php?id=3&p=1");
-        spider.run();
-        if (spider.getStatus().compareTo(Spider.Status.Stopped) == 0) {
-            for (String s : process.list) {
-                System.out.println(s);
-            }
-        }
-    }
 
 }

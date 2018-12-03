@@ -2,7 +2,6 @@ package com.pab.framework.crawlerengine.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Service;
 
 import java.util.concurrent.ExecutorService;
