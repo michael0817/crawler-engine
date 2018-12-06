@@ -1,4 +1,4 @@
-package com.post.html;
+package com.mall.cmbchina.product.post.html;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class Scale {
     public  String getScale(String productCode) throws IOException, InterruptedException {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder builder = new StringBuilder();
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");

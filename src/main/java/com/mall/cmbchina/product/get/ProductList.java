@@ -39,10 +39,6 @@ public class ProductList implements PageProcessor {
         return site;
     }
 
-    public static void main(String[] args) {
-        ProductList productList = new ProductList();
-        Product process = productList.process("370");
-        System.out.println(process);
-    }
+
 
 }

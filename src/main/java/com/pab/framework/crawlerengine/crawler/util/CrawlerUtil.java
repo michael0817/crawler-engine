@@ -117,13 +117,13 @@ public final class CrawlerUtil {
      * @param str https%3a%2f%2fssl.mall.cmbchina.com%2f_CL5_%2fProduct%2f
      * @return https://ssl.mall.cmbchina.com/_CL5_/Product/
      */
-    public static StringBuffer getAhref(String str) {
+    public static StringBuilder getAhref(String str) {
         //String str = "https%3a%2f%2fssl.mall.cmbchina.com%2f_CL5_%2fProduct%2fDetail%3fproductCode%3dS1H-70D-23E_026%26pushwebview%3d1%26productIndex%3d1";
-        StringBuffer stringBufferResult = new StringBuffer();
+        StringBuilder stringBufferResult = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
             char chr = str.charAt(i);
             if (chr == '%') {
-                StringBuffer stringTmp = new StringBuffer();
+                StringBuilder stringTmp = new StringBuilder();
                 stringTmp.append(str.charAt(i + 1)).append(str.charAt(i + 2));
                 //转换字符，16进制转换成整型
                 stringBufferResult.append((char) (Integer.valueOf(stringTmp.toString(), 16).intValue()));

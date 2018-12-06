@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -46,7 +45,7 @@ public class NewsTaskHandler implements TaskHandler {
     @Autowired
     private DetailPageProcessor detailPageProcessor;
 
-    @Scheduled(cron = "0  0 8 * * ?")
+    //@Scheduled(cron = "0  0 8 * * ?")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {

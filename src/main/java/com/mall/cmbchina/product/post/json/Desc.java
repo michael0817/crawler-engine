@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.mall.cmbchina.post.json;
+package com.mall.cmbchina.product.post.json;
 
 import com.alibaba.fastjson.JSONObject;
 import org.apache.http.HttpEntity;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Desc {
 //S1H-M0I-2OQ_220
     public  String getDesc(String productCode) throws IOException, InterruptedException {
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder builder = new StringBuilder();
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
@@ -37,16 +37,10 @@ public class Desc {
         BufferedReader br=new BufferedReader(isr);
         String line;
         while((line=br.readLine())!=null){
-         buffer.append(line);
+            builder.append(line);
         }
-        JSONObject jsonObject=JSONObject.parseObject(buffer.toString());
+        JSONObject jsonObject=JSONObject.parseObject(builder.toString());
         return jsonObject.getString("Results");
     }
 
-
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        Desc desc=new Desc();
-        //  desc.getDesc("S1H-M0I-2OQ_220");
-    }
 }
