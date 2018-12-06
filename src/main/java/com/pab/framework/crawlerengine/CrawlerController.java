@@ -17,12 +17,10 @@ import java.util.List;
 @RestController
 public class CrawlerController {
 
-//    @Autowired
-//    private FlowProcessor flowProcessor;
+
     @Autowired
     private CrawlerFlowInfoDao crawlerFlowInfoDao;
-//    @Autowired
-//    private FlowDetailProcessor flowDetailProcessor;
+
     @Autowired
     private CrawlerFlowDetailDao crawlerFlowDetailDao;
     @Autowired
