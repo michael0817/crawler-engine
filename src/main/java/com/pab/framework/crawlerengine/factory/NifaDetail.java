@@ -1,8 +1,9 @@
-package com.pab.framework.crawlerengine.crawler.factory;
+package com.pab.framework.crawlerengine.factory;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.selector.Html;
@@ -13,34 +14,36 @@ import us.codecraft.webmagic.selector.Selectable;
  * @since 0.3.2
  */
 @Component
-public class KaxunDetail implements Detail {
+public class NifaDetail implements  Detail {
 
-    public String getTitle(Page page) {
+    public String getTitle(Page page){
         Html html=page.getHtml();
-        String title = html.xpath("h1[@class='nr01_tit']/text()").get();
+        String title=html.xpath( "td[@class='dabiaoti']/text()").get();
         return title;
     }
 
     @Override
     public String getDate(Page page) {
         Html html=page.getHtml();
-        String date = html.xpath("p[@class='right01_date']/text(2)").get();
+        String date=html.xpath( "td[@class='zi8']/text()").get();
         return date;
     }
 
     @Override
     public String getContent(Page page) {
         Html html=page.getHtml();
-        Selectable xpath = html.xpath("div[@class='right01_nr']");
+        StringBuilder builder = new StringBuilder();
+        Selectable xpath = html.xpath("td[@id='zhengwen']");
         Document document = Jsoup.parse(xpath.get());
         Element body = document.body();
-        String string = body.text();
-        String[] strings = string.split(" ");
-        StringBuilder builder = new StringBuilder(string.length());
-        int length = strings.length;
-        for (int i = 0; i < length; i++) {
-            builder.append(strings[i]);
-            builder.append("\n");
+        Elements elements = body.getAllElements();
+        int size = elements.size();
+        for (int i = 0; i < size; i++) {
+            body = elements.get(i);
+            if ("p".equals(body.nodeName())){
+                builder.append(body.text());
+                builder.append("\n");
+            }
         }
         return builder.toString();
     }

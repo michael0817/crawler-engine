@@ -2,7 +2,7 @@ package com.pab.framework.crawlerengine.task;
 
 import com.pab.framework.crawlerdb.dao.*;
 import com.pab.framework.crawlerdb.domain.*;
-import com.pab.framework.crawlerengine.crawler.processor.DetailPageProcessor;
+import com.pab.framework.crawlerengine.processor.DetailPageProcessor;
 import com.pab.framework.crawlerengine.crawler.util.CrawlerUtil;
 import com.pab.framework.crawlerengine.crawler.util.FileUtils;
 import com.pab.framework.crawlerengine.processor.action.ActionProcessor;

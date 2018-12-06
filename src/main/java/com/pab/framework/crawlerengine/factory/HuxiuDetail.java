@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.factory;
+package com.pab.framework.crawlerengine.factory;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;

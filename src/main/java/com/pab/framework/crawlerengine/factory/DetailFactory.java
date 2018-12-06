@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.factory;
+package com.pab.framework.crawlerengine.factory;
 
 public final class DetailFactory {
     public static Detail getDetail(String domain) {

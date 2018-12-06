@@ -1,8 +1,8 @@
-package com.pab.framework.crawlerengine.crawler.processor;
+package com.pab.framework.crawlerengine.processor;
 
 import com.pab.framework.crawlerdb.domain.CrawlerArticle;
-import com.pab.framework.crawlerengine.crawler.factory.Detail;
-import com.pab.framework.crawlerengine.crawler.factory.DetailFactory;
+import com.pab.framework.crawlerengine.factory.Detail;
+import com.pab.framework.crawlerengine.factory.DetailFactory;
 import com.pab.framework.crawlerengine.crawler.util.CrawlerUtil;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;

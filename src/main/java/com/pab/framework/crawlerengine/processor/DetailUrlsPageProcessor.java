@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.processor;
+package com.pab.framework.crawlerengine.processor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;

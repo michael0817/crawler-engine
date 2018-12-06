@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.selenium;
+package com.pab.framework.crawlerengine.selenium;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

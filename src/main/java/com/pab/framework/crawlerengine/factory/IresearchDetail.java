@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.factory;
+package com.pab.framework.crawlerengine.factory;
 
 
 import com.alibaba.fastjson.JSON;
