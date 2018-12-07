@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Scale {
-    public String getScale(String productCode) throws IOException, InterruptedException {
+public final  class Scale {
+    public static String getScale(String productCode) throws IOException, InterruptedException {
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetScale");
@@ -22,7 +22,6 @@ public class Scale {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        Scale scale = new Scale();
-        System.out.println(scale.getScale("S1H-50T-2PF-06_015"));
+        System.out.println(Scale.getScale("S1H-50T-2PF-06_015"));
     }
 }

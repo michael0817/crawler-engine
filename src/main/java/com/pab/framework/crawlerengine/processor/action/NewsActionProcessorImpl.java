@@ -4,7 +4,7 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerengine.processor.DetailPageProcessor;
 import com.pab.framework.crawlerengine.processor.DetailUrlsPageProcessor;
 import com.pab.framework.crawlerengine.processor.LoginDetailUrlsPageProcessor;
-import com.pab.framework.crawlerengine.crawler.util.UrlUtils;
+import com.pab.framework.crawlerengine.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.util;
+package com.pab.framework.crawlerengine.util;
 
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;

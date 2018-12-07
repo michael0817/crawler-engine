@@ -21,38 +21,42 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Component
-public class Consult {
+public final class Consult {
 
-    private final Map<String, String> map = new HashMap<>();
+    private static final Map<String, String> map = new HashMap<>();
 
 
-    public StringBuilder getReviewList(String productCode) throws IOException, InterruptedException {
-        StringBuilder builder = new StringBuilder();
+    public  static StringBuilder getConsultList(String productCode) throws IOException, InterruptedException {
+
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         HttpEntity entity= HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
-        Element element = document.getElementsByTag("em").get(0);
-        String record = element.text();
-        int pageSize = elements.size();
-        map.put("pageSize", String.valueOf(pageSize));
-        map.put("record", record);
-        builder.append(element.outerHtml());
-        int size = elements.size();
-        for (int i = 0; i < size; i++) {
-            int num = Integer.parseInt(record);
-            if (num > 0) {
-                builder.append(elements.get(i).outerHtml());
-                builder.append("\n");
+        Elements  recordEles=document.getElementsByTag("em");
+        int size=recordEles.size();
+        if (size>0){
+            Element recordEle=recordEles.get(0);
+            String record =recordEle.text();
+            int pageSize =elements.size();
+            map.put("pageSize", String.valueOf(pageSize));
+            map.put("record", record);
+            StringBuilder builder = new StringBuilder();
+            builder.append(recordEle.outerHtml());
+            for (int i = 0; i < pageSize; i++) {
+                int num = Integer.parseInt(record);
+                if (num > 0) {
+                    builder.append(elements.get(i).outerHtml());
+                    builder.append("\n");
+                }
             }
-
+            return builder;
         }
-        return builder;
+        return null;
 
     }
 
-    public StringBuilder getReviewList(String productCode, String record, String pageSize) throws IOException, InterruptedException {
+    public  static StringBuilder getConsultList(String productCode, String record, String pageSize) throws IOException, InterruptedException {
         int maxPage = 0;
         int page = Integer.parseInt(pageSize);
         int num = Integer.parseInt(record);
@@ -83,7 +87,7 @@ public class Consult {
         return builder;
     }
 
-    public StringBuilder getReviewList(String productCode, String pageSize) throws IOException, InterruptedException {
+    public static StringBuilder getConsultList(String productCode, String pageSize) throws IOException, InterruptedException {
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         list.add(new BasicNameValuePair("pageSize", pageSize));
@@ -100,22 +104,25 @@ public class Consult {
         return builder;
     }
 
-    public StringBuilder htmlBuilder(String productCode) throws IOException, InterruptedException {
-        StringBuilder builder = getReviewList(productCode);
+    public  static StringBuilder htmlBuilder(String productCode) throws IOException, InterruptedException {
+        StringBuilder builder = getConsultList(productCode);
         String pageSize = map.get("pageSize");
         String record = map.get("record");
-        if (Integer.parseInt(pageSize) > 0 && Integer.parseInt(record) > 0) {
-            builder.append(getReviewList(productCode,record,pageSize ));
+        if (pageSize!=null&&record!=null){
+            if (Integer.parseInt(pageSize) > 0 && Integer.parseInt(record) > 0) {
+                builder.append(getConsultList(productCode,record,pageSize ));
+            }
+            if (Integer.parseInt(pageSize) > 0) {
+                builder.append(getConsultList(productCode,pageSize ));
+            }
         }
-        if (Integer.parseInt(pageSize) > 0) {
-            builder.append(getReviewList(productCode,pageSize ));
-        }
+
         return builder;
     }
     public static void main(String[] args) throws IOException, InterruptedException {
         //401345
-        Consult consult = new Consult();
-        System.out.println(consult.htmlBuilder("401345"));
+//S1H-50T-2PF-06_015
+        System.out.println(Consult.htmlBuilder("S1H-50T-2PF-06_015"));
     }
 
 }

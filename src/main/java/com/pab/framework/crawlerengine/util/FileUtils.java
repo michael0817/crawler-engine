@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.crawler.util;
+package com.pab.framework.crawlerengine.util;
 
 import com.pab.framework.crawlerdb.domain.CrawlerArticle;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -69,4 +69,7 @@ public final class FileUtils {
         }
     }
 
+    public static  String getDir(){
+        return  System.getProperty("dir");
+    }
 }

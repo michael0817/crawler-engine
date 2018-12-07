@@ -25,4 +25,5 @@ public final class HttpPostRequest {
         HttpEntity entity = response.getEntity();
         return entity;
     }
+
 }

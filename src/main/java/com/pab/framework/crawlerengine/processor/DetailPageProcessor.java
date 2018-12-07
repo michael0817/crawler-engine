@@ -3,7 +3,8 @@ package com.pab.framework.crawlerengine.processor;
 import com.pab.framework.crawlerdb.domain.CrawlerArticle;
 import com.pab.framework.crawlerengine.factory.Detail;
 import com.pab.framework.crawlerengine.factory.DetailFactory;
-import com.pab.framework.crawlerengine.crawler.util.CrawlerUtil;
+
+import com.pab.framework.crawlerengine.util.CrawlerUtil;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
@@ -68,7 +69,7 @@ public class DetailPageProcessor implements PageProcessor {
             } else {
                 url_addrs[i] = baseUrlAddr + urlAddrs.get(i);
             }
-            domain = CrawlerUtil.domainStr(url_addrs[i]);
+            domain= CrawlerUtil.domainStr((url_addrs[i]));
         }
         spider = Spider.create(this).addUrl(url_addrs).thread(5);
         spider.run();

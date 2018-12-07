@@ -5,6 +5,7 @@ import com.mall.cmbchina.domain.Category;
 import com.mall.cmbchina.domain.Product;
 import com.mall.cmbchina.product.get.ProductList;
 import com.mall.cmbchina.product.get.ProductListAjaxLoad;
+import com.mall.cmbchina.product.post.html.Consult;
 import com.mall.cmbchina.product.post.html.Review;
 import com.mall.cmbchina.product.post.html.Scale;
 import com.mall.cmbchina.product.post.json.Desc;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -25,9 +27,9 @@ public class MallTaskHandler implements TaskHandler {
     @Autowired
     ExecutorService threadFactory;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    StringBuilder builder;
+    private StringBuilder builder=new StringBuilder();
 
-    //@Scheduled(cron = "0  0 8 * * ?")
+    @Scheduled(cron = "0  0 8 * * ?")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {
@@ -35,27 +37,28 @@ public class MallTaskHandler implements TaskHandler {
                 Categories categories = new Categories();
                 Category category = categories.process("5");
                 String subcategory = category.getSubcategory();
-                ProductList productList = new ProductList();
-                Product process = productList.process(subcategory);
-                ProductListAjaxLoad productListAjaxLoad;
-                Desc desc;
-                Scale scale;
-                Review review;
+                ProductList productList=new ProductList();
+                Product product = productList.process(subcategory);
 
-                productListAjaxLoad = new ProductListAjaxLoad();
+                ProductListAjaxLoad productListAjaxLoad = new ProductListAjaxLoad();
                 productListAjaxLoad.process(subcategory, 1 + "");
                 List<String> productCodes = productListAjaxLoad.getProductCodes();
-                desc = new Desc();
-                scale = new Scale();
-                review = new Review();
-
+                StringBuilder reviewBuilder=null;
+                StringBuilder consultBuilder=null;
                 for (String productCode : productCodes) {
                     try {
-                        String descStr = desc.getDesc(productCode);
-                        String scaleStr = scale.getScale(productCode);
-                         builder=review.getReviewList(productCode);
-
-                        System.err.println(builder);
+                        String descStr = Desc.getDesc(productCode);
+                        String scaleStr = Scale.getScale(productCode);
+                     //   FileUtils.write(FileUtils.getDir()+ File.separator+"产品参数");
+                        Review.htmlBuilder(productCode);
+                        reviewBuilder = Review.htmlBuilder(productCode);
+                        consultBuilder=Consult.htmlBuilder(productCode);
+                        if (reviewBuilder!=null) {
+                            builder.append(reviewBuilder);
+                        }
+                        if (consultBuilder!=null){
+                            builder.append(consultBuilder);
+                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
