@@ -5,6 +5,7 @@ import com.pab.framework.crawlerdb.domain.CrawlerFlowInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public class FlowProcessorImpl implements FlowProcessor{
     private  FlowDetailProcessor flowDetailProcessor;
 
 @Override
- public void start(){
+ public void start() throws IOException {
      List<CrawlerFlowInfo> crawlerFlowInfos = crawlerFlowInfoDao.findAll();
 
      for (CrawlerFlowInfo crawlerFlowInfo : crawlerFlowInfos) {

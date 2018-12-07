@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -31,7 +32,11 @@ public class NewsTaskHandler implements TaskHandler {
         threadFactory.execute(new Runnable() {
             @Override
             public void run() {
-                flowProcessor.start();
+                try {
+                    flowProcessor.start();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

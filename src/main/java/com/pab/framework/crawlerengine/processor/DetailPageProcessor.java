@@ -79,4 +79,11 @@ public class DetailPageProcessor implements PageProcessor {
         return null;
     }
 
+
+    public static void main(String[] args) {
+        DetailPageProcessor detailPageProcessor = new DetailPageProcessor();
+        List<String> urlAddrs = new ArrayList<>();
+        urlAddrs.add("http://www.cbrc.gov.cn/chinese/newShouDoc/2F17C2C95E724066818561C7D2F622D8.html");
+       detailPageProcessor.process("http://www.cbrc.gov.cn", urlAddrs);
+    }
 }

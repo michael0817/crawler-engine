@@ -2,6 +2,8 @@ package com.pab.framework.crawlerengine.processor.flow;
 
 import com.pab.framework.crawlerengine.processor.BaseProcessor;
 
+import java.io.IOException;
+
 /**
  *
  * @author xumx
@@ -9,7 +11,7 @@ import com.pab.framework.crawlerengine.processor.BaseProcessor;
  */
 public interface FlowProcessor extends BaseProcessor {
 
-    void start();
+    void start() throws IOException;
 
 
 }

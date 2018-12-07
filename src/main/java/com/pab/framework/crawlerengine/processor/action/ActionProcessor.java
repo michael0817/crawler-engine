@@ -1,6 +1,8 @@
 package com.pab.framework.crawlerengine.processor.action;
 
 import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
+
+import java.io.IOException;
 import java.util.List;
 
 
@@ -11,5 +13,5 @@ import java.util.List;
 public interface ActionProcessor {
 
     List<String> getUrlAddrs(CrawlerActionInfo crawlerActionInfo);
-    void process(Integer actionId);
+    void process(Integer actionId) throws IOException;
 }

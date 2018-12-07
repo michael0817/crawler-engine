@@ -6,6 +6,7 @@ import com.pab.framework.crawlerengine.processor.action.ActionProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -21,7 +22,7 @@ public class FlowDetailProcessorImpl implements FlowDetailProcessor {
     private ActionProcessor actionProcessor;
 
     @Override
-    public void process(Integer flowId) {
+    public void process(Integer flowId) throws IOException {
         List<CrawlerFlowDetail> crawlerFlowDetails = crawlerFlowDetailDao.findAllByFlowId(flowId);
         for (CrawlerFlowDetail crawlerFlowDetail : crawlerFlowDetails) {
             actionProcessor.process(crawlerFlowDetail.getActionId());
