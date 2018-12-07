@@ -1,12 +1,8 @@
 package com.mall.cmbchina.product.post.html;
 
+import com.mall.cmbchina.http.HttpPostRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -17,20 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Scale {
-    public  String getScale(String productCode) throws IOException, InterruptedException {
-        StringBuilder builder = new StringBuilder();
+    public String getScale(String productCode) throws IOException, InterruptedException {
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
-        UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
-        HttpPost httpPost = new HttpPost("https://ssl.mall.cmbchina.com/_CL5_/Product/GetScale");
-        httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        httpPost.setEntity(entityParam);
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        Thread.sleep(3000);
-        HttpEntity entity = response.getEntity();
+        HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetScale");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         return document.body().html();
+    }
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        Scale scale = new Scale();
+        System.out.println(scale.getScale("S1H-50T-2PF-06_015"));
     }
 }

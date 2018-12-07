@@ -1,12 +1,8 @@
 package com.mall.cmbchina.product.post.html;
 
+import com.mall.cmbchina.http.HttpPostRequest;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.jsoup.Jsoup;
@@ -31,15 +27,16 @@ public class Review {
         StringBuilder builder = new StringBuilder();
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
-        UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
-        HttpPost httpPost = new HttpPost("https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
-        httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        httpPost.setEntity(entityParam);
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        Thread.sleep(3000);
-        HttpEntity entity = response.getEntity();
+//        UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
+//        HttpPost httpPost = new HttpPost("https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
+//        httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
+//        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
+//        httpPost.setEntity(entityParam);
+//        CloseableHttpClient httpClient = HttpClients.createDefault();
+//        CloseableHttpResponse response = httpClient.execute(httpPost);
+//        Thread.sleep(3000);
+//        HttpEntity entity = response.getEntity();
+        HttpEntity entity=HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
         Element element = document.getElementsByTag("em").get(0);
@@ -68,28 +65,18 @@ public class Review {
         if (num > 0 && page > 0) {
             maxPage = (num - 1) / page + 1;
         }
-        List<NameValuePair> list = new LinkedList<>();
-        CloseableHttpClient httpClient = null;
-        HttpPost httpPost = null;
-        UrlEncodedFormEntity entityParam = null;
+        StringBuilder builder = null;
+       List<NameValuePair> list = new LinkedList<>();
+
         HttpEntity entity = null;
-        CloseableHttpResponse response = null;
         Document document = null;
         Elements elements = null;
-        StringBuilder builder = null;
         for (AtomicInteger atomicInteger = new AtomicInteger(2); atomicInteger.get() < maxPage; atomicInteger.getAndIncrement()) {
             list.add(new BasicNameValuePair("productCode", productCode));
             list.add(new BasicNameValuePair("pageIndex", atomicInteger.get() + ""));
             list.add(new BasicNameValuePair("pageSize", pageSize));
-            entityParam = new UrlEncodedFormEntity(list, "UTF-8");
-            httpPost = new HttpPost("https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
-            httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
-            httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-            httpPost.setEntity(entityParam);
-            httpClient = HttpClients.createDefault();
-            response = httpClient.execute(httpPost);
-            Thread.sleep(3000);
-            entity = response.getEntity();
+
+            entity=HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
             document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
             elements = document.getElementsByTag("dl");
             int size = elements.size();
@@ -106,15 +93,8 @@ public class Review {
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
         list.add(new BasicNameValuePair("pageSize", pageSize));
-        UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
-        HttpPost httpPost = new HttpPost("https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
-        httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
-        httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded");
-        httpPost.setEntity(entityParam);
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpClient.execute(httpPost);
-        Thread.sleep(3000);
-        HttpEntity entity = response.getEntity();
+
+        HttpEntity entity= HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
         StringBuilder builder = new StringBuilder();
@@ -141,7 +121,7 @@ public class Review {
 
     public static void main(String[] args) throws IOException, InterruptedException {
         Review review = new Review();
-        System.out.println(review.getReviewList("S1H-50T-2PF-06_015"));
+        System.out.println(review.htmlBuilder("S1H-50T-2PF-06_015"));
     }
 
 }
