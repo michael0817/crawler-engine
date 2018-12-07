@@ -9,4 +9,7 @@ import com.pab.framework.crawlerengine.processor.BaseProcessor;
  */
 public interface FlowProcessor extends BaseProcessor {
 
+    void start();
+
+
 }
