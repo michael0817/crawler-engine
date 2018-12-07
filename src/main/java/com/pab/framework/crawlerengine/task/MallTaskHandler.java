@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class MallTaskHandler implements TaskHandler {
     ExecutorService threadFactory;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    //@Scheduled(cron = "0  0 8 * * ?")
+    @Scheduled(cron = "0  0 8 * * ?")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {
