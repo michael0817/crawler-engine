@@ -39,6 +39,12 @@ public class ProductList implements PageProcessor {
         return site;
     }
 
+    public static void main(String[] args) {
+        ProductList githubRepoPageProcessor = new ProductList();
 
+        Spider.create(githubRepoPageProcessor)
+                .addUrl("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=370&pushwebview=1")
+                .thread(5).run();
+    }
 
 }

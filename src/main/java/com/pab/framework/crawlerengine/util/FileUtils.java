@@ -70,6 +70,6 @@ public final class FileUtils {
     }
 
     public static  String getDir(){
-        return  System.getProperty("dir");
+        return  System.getProperty("user.dir")+File.separator+"out"+File.separator;
     }
 }
