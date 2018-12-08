@@ -1,5 +1,14 @@
 package com.pab.framework.crawlerengine.processor.action;
 
+import com.mall.cmbchina.category.get.Categories;
+import com.mall.cmbchina.domain.Category;
+import com.mall.cmbchina.domain.Product;
+import com.mall.cmbchina.product.get.ProductList;
+import com.mall.cmbchina.product.get.ProductListAjaxLoad;
+import com.mall.cmbchina.product.post.html.Consult;
+import com.mall.cmbchina.product.post.html.Review;
+import com.mall.cmbchina.product.post.html.Scale;
+import com.mall.cmbchina.product.post.json.Desc;
 import com.pab.framework.crawlerdb.dao.CrawerActionDynamicInfoDao;
 import com.pab.framework.crawlerdb.dao.CrawlerActionInfoDao;
 import com.pab.framework.crawlerdb.dao.CrawlerNewsMilestoneDao;
@@ -8,6 +17,7 @@ import com.pab.framework.crawlerengine.crawler.CrawlerHandler;
 import com.pab.framework.crawlerengine.processor.DetailPageProcessor;
 import com.pab.framework.crawlerengine.processor.DetailUrlsPageProcessor;
 import com.pab.framework.crawlerengine.processor.LoginDetailUrlsPageProcessor;
+import com.pab.framework.crawlerengine.util.FileUtils;
 import com.pab.framework.crawlerengine.util.UrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,8 +64,8 @@ public class NewsActionProcessorImpl implements ActionProcessor {
                 suffix = "&user_id=7558914709";
                 loginDetailUrlsPageProcessor.process(baseUrlAddr + prefix + i + suffix);
                 return loginDetailUrlsPageProcessor.getList();
-            } else {
-
+            }
+            else {
                 detailUrlsPageProcessor.setRegex(crawlerRegex);
                 detailUrlsPageProcessor.process(crawlerRegex, baseUrlAddr + prefix + i + suffix);
                 return detailUrlsPageProcessor.getList();
@@ -68,16 +78,56 @@ public class NewsActionProcessorImpl implements ActionProcessor {
     @Override
     public void process(Integer actionId) throws IOException {
         CrawlerActionInfo crawlerActionInfo = crawlerActionInfoDao.findOneByActionById(actionId);
-        int actionType = crawlerActionInfo.getActionType();
-        switch (actionType) {
-            case 2:
-                urlAddrs = getUrlAddrs(crawlerActionInfo);
-                break;
-            case 3:
-
-                crawlerHandler.handler(crawlerActionInfo,urlAddrs);
-                break;
+        if (actionId<27){
+            int actionType = crawlerActionInfo.getActionType();
+            switch (actionType) {
+                case 2:
+                    urlAddrs = getUrlAddrs(crawlerActionInfo);
+                    break;
+                case 3:
+                    crawlerHandler.handler(crawlerActionInfo,urlAddrs);
+                    break;
+            }
         }
+        //暂时处理商城手机
+        else{
+            Categories categories = new Categories();
+            Category category = categories.process("5");
+            String categoryName=category.getCategoryName();
+            String subcategory = category.getSubcategory();
+            ProductList productList=new ProductList();
+            Product product = productList.process(subcategory);
+            ProductListAjaxLoad productListAjaxLoad = new ProductListAjaxLoad();
+            productListAjaxLoad.process(subcategory, 1 + "");
+            List<String> productCodes = productListAjaxLoad.getProductCodes();
+            StringBuilder reviewBuilder=null;
+            StringBuilder consultBuilder=null;
+            for (String productCode : productCodes) {
+                try {
+                    String descStr = Desc.getDesc(productCode);
+                    String scaleStr = Scale.getScale(productCode);
+                    if (descStr!=null){
+                        FileUtils.write(FileUtils.getDir()+"图文参数("+categoryName+")"+".txt",descStr);
+                    }
+                    if (scaleStr!=null){
+                        FileUtils.write(FileUtils.getDir()+"产品参数("+categoryName+")"+".txt",scaleStr);
+                    }
+                    reviewBuilder = Review.htmlBuilder(productCode);
+                    if (reviewBuilder!=null) {
+                        FileUtils.write(FileUtils.getDir()+"咨询("+categoryName+")"+".txt",reviewBuilder.toString());
+                    }
+                    consultBuilder= Consult.htmlBuilder(productCode);
+
+                    if (consultBuilder!=null){
+                        FileUtils.write(FileUtils.getDir()+"评论("+categoryName+")"+".txt",consultBuilder.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+
 
     }
 
