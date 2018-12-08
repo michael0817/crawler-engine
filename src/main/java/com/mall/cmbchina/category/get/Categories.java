@@ -29,7 +29,7 @@ public class Categories implements PageProcessor {
     }
 
     public Category process(String id) {
-        Spider spider = Spider.create(this).addUrl("https://ssl.mall.cmbchina.com/_CL5_/Category/GetCategories?id=5").thread(5);
+        Spider spider = Spider.create(this).addUrl("https://ssl.mall.cmbchina.com/_CL5_/Category/GetCategories?id="+id).thread(5);
         spider.run();
         if(Spider.Status.Stopped.compareTo(spider.getStatus())==0){
             Category category=new Category();

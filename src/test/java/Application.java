@@ -1,4 +1,5 @@
 import com.pab.framework.crawlerengine.CrawlerEngineApplication;
+import com.pab.framework.crawlerengine.db.ScheduleConfig;
 import com.pab.framework.crawlerengine.task.NewsTaskHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,16 +12,19 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class Application {
     @Autowired
     private NewsTaskHandler newsTaskHandler;
+    @Autowired
+    private ScheduleConfig scheduleConfig;
 
     @Test
-    public  void test(){
-        newsTaskHandler.taskRun();
-            while (true){
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+    public void test() {
+        //    newsTaskHandler.taskRun();
+        scheduleConfig.setCron("0  0 8 * * ?");
+        while (true) {
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+        }
     }
 }
