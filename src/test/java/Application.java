@@ -1,5 +1,4 @@
 import com.pab.framework.crawlerengine.CrawlerEngineApplication;
-import com.pab.framework.crawlerengine.task.MallTaskHandler;
 import com.pab.framework.crawlerengine.task.NewsTaskHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,19 +11,16 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class Application {
     @Autowired
     private NewsTaskHandler newsTaskHandler;
-    @Autowired
-    private MallTaskHandler mallTaskHandler;
 
     @Test
-    public void test() {
+    public  void test(){
         newsTaskHandler.taskRun();
-        mallTaskHandler.taskRun();
-        while (true) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            while (true){
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }
     }
 }
