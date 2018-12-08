@@ -23,7 +23,7 @@ public class DetailUrlsPageProcessor implements PageProcessor {
 
     public List<String> getList() {
 
-        return list;
+         return list;
     }
 
     private String regex;
@@ -58,14 +58,12 @@ public class DetailUrlsPageProcessor implements PageProcessor {
         }
     }
 
-
-    public void process(String regex, String urlAddr) {
+    public void process(String regex, List<String> urlAddrs) {
         if (StringUtils.isNotEmpty(regex)) {
             this.setRegex(regex);
         }
-        Spider spider = Spider.create(this).addUrl(urlAddr);
+        Spider spider = Spider.create(this).addUrl(urlAddrs.toArray(new String[urlAddrs.size()]));
         spider.run();
-
     }
 
     @Override

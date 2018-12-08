@@ -53,10 +53,9 @@ public class LoginDetailUrlsPageProcessor implements PageProcessor {
 
     }
 
-    public void process(String urlAddr) {
-        Spider spider = Spider.create(this).addUrl(urlAddr);
+    public void process(List<String> urlAddrs) {
+        Spider spider = Spider.create(this).addUrl(urlAddrs.toArray(new String[urlAddrs.size()]));
         spider.run();
-
     }
 
     @Override

@@ -43,10 +43,12 @@ public class DetailPageProcessor implements PageProcessor {
         date = detail.getDate(page);
         content = detail.getContent(page);
         CrawlerArticle crawlerArticle = new CrawlerArticle();
-        crawlerArticle.setTitle(title);
+        if (title!=null){
+            crawlerArticle.setTitle(title);
+        }
         crawlerArticle.setDate(date);
-        crawlerArticle.setContent(content);
-        if (title != null && content != null) {
+        if (content != null) {
+            crawlerArticle.setContent(content);
             crawlerArticles.add(crawlerArticle);
         }
 
