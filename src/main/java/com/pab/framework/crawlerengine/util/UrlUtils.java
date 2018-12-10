@@ -66,11 +66,23 @@ public final class UrlUtils {
             String group = matcher.group();
             return Integer.parseInt(group.substring(0, group.length() - 1));
         }
-        return  -1;
+        return -1;
     }
 
-        public static void main (String[]args) throws IOException {
-            printUrl();
+    public static StringBuffer getAhref(String str) {
+        StringBuffer stringBufferResult = new StringBuffer();
+        for (int i = 0; i < str.length(); i++) {
+            char chr = str.charAt(i);
+            if (chr == '%') {
+                StringBuffer stringTmp = new StringBuffer();
+                stringTmp.append(str.charAt(i + 1)).append(str.charAt(i + 2));
+                stringBufferResult.append((char) (Integer.valueOf(stringTmp.toString(), 16).intValue()));
+                i = i + 2;
+                continue;
+            }
+            stringBufferResult.append(chr);
         }
-
+        return stringBufferResult;
     }
+
+}
