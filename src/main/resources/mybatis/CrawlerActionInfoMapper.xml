@@ -10,10 +10,20 @@
         <result column="base_url_addr" jdbcType="VARCHAR" property="baseUrlAddr"/>
         <result column="crawler_regex" jdbcType="VARCHAR" property="crawlerRegex"/>
     </resultMap>
-    <select id="findOneByActionById" resultMap="crawlerActionInfo" parameterType="int">
+    <select id="findCrawlerActionInfo" resultMap="crawlerActionInfo" parameterType="int">
         select action_id, action_desc, action_type, url_type, url_addr, base_url_addr, crawler_regex from
         crawler_action_info
         <where>action_id=#{actionId}</where>
+    </select>
+
+    <select id="findCrawlerActionInfos" resultMap="crawlerActionInfo">
+        select action_id, action_desc, action_type, url_type, url_addr, base_url_addr, crawler_regex from
+        crawler_action_info
+        <where>action_id in
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        </where>
     </select>
 </mapper>
 

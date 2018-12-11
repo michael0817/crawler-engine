@@ -25,6 +25,7 @@ public class ProductListAjaxLoad implements PageProcessor {
             builder.append(node.get());
             productCodes.add( node.xpath("span[@productid]/@productid").get());
         }
+        System.out.println(productCodes);
 
     }
 
@@ -42,9 +43,12 @@ public class ProductListAjaxLoad implements PageProcessor {
     }
 
     public void process(String subCategory, String pageIndex) {
-        Spider spider = Spider.create(this).addUrl("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subCategory + "&pageIndex=" + pageIndex).thread(5);
-        spider.run();
+       process("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subCategory + "&pageIndex=" + pageIndex,subCategory,pageIndex);
+    }
 
+    public  void process(String uri,String subCategory, String pageIndex){
+        Spider spider = Spider.create(this).addUrl(uri).thread(5);
+        spider.run();
     }
 
     public static void main(String[] args) {

@@ -20,10 +20,13 @@ public class ProductList implements PageProcessor {
         subCategory = document.getElementById("subCategory").val();
         totalPageNumber = document.getElementById("totalPageNumber").val();
     }
-
+//"https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subcategory + "&pushwebview=1"
+    public Product process(String uri,String subcategory ){
+        return process(uri+subcategory,subcategory);
+    }
 
     public Product process(String subcategory) {
-        Spider spider = Spider.create(this).addUrl("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subcategory + "&pushwebview=1").thread(5);
+        Spider spider = Spider.create(this).addUrl().thread(5);
         spider.run();
         if (Spider.Status.Stopped.compareTo(Spider.Status.Stopped) == 0) {
             Product product = new Product();
@@ -39,12 +42,5 @@ public class ProductList implements PageProcessor {
         return site;
     }
 
-    public static void main(String[] args) {
-        ProductList githubRepoPageProcessor = new ProductList();
-
-        Spider.create(githubRepoPageProcessor)
-                .addUrl("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=370&pushwebview=1")
-                .thread(5).run();
-    }
 
 }

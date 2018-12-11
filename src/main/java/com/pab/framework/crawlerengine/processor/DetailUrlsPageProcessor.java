@@ -1,11 +1,16 @@
 package com.pab.framework.crawlerengine.processor;
 
+import com.pab.framework.crawlerengine.util.UrlUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 import us.codecraft.webmagic.selector.Html;
 import us.codecraft.webmagic.selector.Selectable;
 
@@ -44,8 +49,24 @@ public class DetailUrlsPageProcessor implements PageProcessor {
             Html html = page.getHtml();
             Selectable links = html.links();
             List<String> all = null;
-            if (StringUtils.isNotEmpty(regex)) {
-                all = links.regex(regex).all();
+            if (StringUtils.isNotEmpty(links.get())){
+                if (StringUtils.isNotEmpty(regex)) {
+                    all = links.regex(regex).all();
+                }
+            }
+            else {
+                //手机数据暂时逻辑
+                all=html.xpath("a/@href").all();
+                int size=all.size();
+                String href;
+                for (int i = 0; i < size; i++) {
+                    href=all.get(i);
+                    href=UrlUtils.getAhref(href).delete(0,"cmblife://go?url=web&next=https://ssl.mall.cmbchina.com".length()).toString();
+                    all.set(i,href);
+                }
+
+            }
+            if (CollectionUtils.isNotEmpty(all)){
                 Set<String> set = new HashSet<String>();
                 set.addAll(all);
                 all.clear();
@@ -57,12 +78,17 @@ public class DetailUrlsPageProcessor implements PageProcessor {
             }
         }
     }
-
     public void process(String regex, List<String> urlAddrs) {
         if (StringUtils.isNotEmpty(regex)) {
             this.setRegex(regex);
         }
-        Spider spider = Spider.create(this).addUrl(urlAddrs.toArray(new String[urlAddrs.size()]));
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(
+                new Proxy("106.42.25.225",80),
+                new Proxy("117.21.219.73",80)
+
+        ));
+        Spider spider = Spider.create(this).setDownloader(httpClientDownloader).thread(urlAddrs.size()).addUrl(urlAddrs.toArray(new String[urlAddrs.size()]));
         spider.run();
     }
 
