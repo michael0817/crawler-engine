@@ -81,7 +81,7 @@ public class NewsActionProcessorImpl implements ActionProcessor {
 
     @Override
     public void process(Integer actionId) throws IOException {
-        CrawlerActionInfo crawlerActionInfo = crawlerActionInfoDao.findOneByActionById(actionId);
+        CrawlerActionInfo crawlerActionInfo = crawlerActionInfoDao.findCrawlerActionInfo(actionId);
         String baseUrlAddr = crawlerActionInfo.getBaseUrlAddr();
         if (actionId < 27) {
             int actionType = crawlerActionInfo.getActionType();
