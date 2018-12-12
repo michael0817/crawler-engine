@@ -13,11 +13,12 @@ import java.util.List;
  * @since 0.3.2
  */
 @Component
-public class CbrcDetail implements  Detail {
+public class CbrcDetail implements Detail {
 
-    public String getTitle(Page page){
-        Html html=page.getHtml();
-        return html.xpath( "div[@id='docTitle']/div/text()").get();
+    public String getTitle(Page page) {
+        Html html = page.getHtml();
+        String title = html.xpath("div[@id='docTitle']/div/text()").get();
+        return title != null ? title.trim() : null;
     }
 
     @Override

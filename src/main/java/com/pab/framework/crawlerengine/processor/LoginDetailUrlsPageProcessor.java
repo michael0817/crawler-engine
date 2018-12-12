@@ -34,10 +34,6 @@ public class LoginDetailUrlsPageProcessor implements PageProcessor {
 
     private List<String> list = new ArrayList<String>();
 
-    public List<String> getList() {
-
-        return list;
-    }
 
     @Override
     public void process(Page page) {
@@ -52,9 +48,13 @@ public class LoginDetailUrlsPageProcessor implements PageProcessor {
 
     }
 
-    public void process(List<String> urlAddrs) {
+    public List<String> process(List<String> urlAddrs) {
         Spider spider = Spider.create(this).addUrl(urlAddrs.toArray(new String[urlAddrs.size()]));
         spider.run();
+        if (Spider.Status.Stopped.compareTo(spider.getStatus())==0){
+            return  list;
+        }
+        return null;
     }
 
     @Override

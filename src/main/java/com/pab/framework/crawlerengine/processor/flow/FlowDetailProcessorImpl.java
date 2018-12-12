@@ -1,7 +1,7 @@
 package com.pab.framework.crawlerengine.processor.flow;
 
 import com.pab.framework.crawlerdb.dao.CrawlerFlowDetailDao;
-import com.pab.framework.crawlerdb.domain.*;
+import com.pab.framework.crawlerdb.domain.CrawlerFlowDetail;
 import com.pab.framework.crawlerengine.processor.action.ActionProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,8 +25,9 @@ public class FlowDetailProcessorImpl implements FlowDetailProcessor {
     public void process(Integer flowId) throws IOException {
         List<CrawlerFlowDetail> crawlerFlowDetails = crawlerFlowDetailDao.findAllByFlowId(flowId);
         for (CrawlerFlowDetail crawlerFlowDetail : crawlerFlowDetails) {
-            actionProcessor.process(crawlerFlowDetail.getActionId());
+             actionProcessor.process(crawlerFlowDetail.getActionId());
         }
+
     }
 
 }

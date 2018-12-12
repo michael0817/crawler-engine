@@ -1,5 +1,14 @@
 package com.pab.framework.crawlerengine.crawler;
 
+import com.mall.cmbchina.category.get.Categories;
+import com.mall.cmbchina.domain.Category;
+import com.mall.cmbchina.domain.Product;
+import com.mall.cmbchina.product.get.ProductList;
+import com.mall.cmbchina.product.get.ProductListAjaxLoad;
+import com.mall.cmbchina.product.post.html.Consult;
+import com.mall.cmbchina.product.post.html.Review;
+import com.mall.cmbchina.product.post.html.Scale;
+import com.mall.cmbchina.product.post.json.Desc;
 import com.pab.framework.crawlerdb.dao.CrawerActionDynamicInfoDao;
 import com.pab.framework.crawlerdb.dao.CrawlerNewsMilestoneDao;
 import com.pab.framework.crawlerdb.domain.CrawerActionDynamicInfo;
@@ -29,7 +38,7 @@ public class CrawlerHandlerImpl implements CrawlerHandler {
     private CrawerActionDynamicInfoDao crawerActionDynamicInfoDao;
 
     @Override
-    public void handler(CrawlerActionInfo crawlerActionInfo,  List<String> urlAddrs) throws IOException {
+    public void handler(CrawlerActionInfo crawlerActionInfo, List<String> urlAddrs) throws IOException {
 
         String baseUrlAddr = crawlerActionInfo.getBaseUrlAddr();
         Integer urlType = crawlerActionInfo.getUrlType();
@@ -57,10 +66,50 @@ public class CrawlerHandlerImpl implements CrawlerHandler {
                 crawlerNewsMilestoneDao.insertAll(crawlerNewsMilestone);
             }
         }
-        urlAddrs = crawlerNewsMilestoneDao.findUrlAddrsByNewDate(actionId);
-        crawlerArticles = detailPageProcessor.process(baseUrlAddr, urlAddrs);
-        actionDesc = crawlerActionInfo.getActionDesc();
-        FileUtils.write(actionDesc, crawlerArticles);
+       List<String> addrs = crawlerNewsMilestoneDao.findUrlAddrsByNewDate(actionId);
+        //商城手机暂时逻辑
+        if ("https://ssl.mall.cmbchina.com".equals(baseUrlAddr)) {
+            Categories categories = new Categories();
+            Category category = categories.process("5");
+            String categoryName = category.getCategoryName();
+            String subcategory = category.getSubcategory();
+            ProductList productList = new ProductList();
+            Product product = productList.process(subcategory);
+            ProductListAjaxLoad productListAjaxLoad = new ProductListAjaxLoad();
+            productListAjaxLoad.process(subcategory, 1 + "");
+            List<String> productCodes = productListAjaxLoad.getProductCodes();
+            StringBuilder reviewBuilder = null;
+            StringBuilder consultBuilder = null;
+            for (String productCode : productCodes) {
+                try {
+                    String descStr = Desc.getDesc(productCode);
+                    String scaleStr = Scale.getScale(productCode);
+                    if (descStr != null) {
+                        FileUtils.write(FileUtils.getDir() + "图文参数(" + categoryName + ")" + ".txt", descStr);
+                    }
+                    if (scaleStr != null) {
+                        FileUtils.write(FileUtils.getDir() + "产品参数(" + categoryName + ")" + ".txt", scaleStr);
+                    }
+                    reviewBuilder = Review.htmlBuilder(productCode);
+                    if (reviewBuilder != null) {
+                        FileUtils.write(FileUtils.getDir() + "咨询(" + categoryName + ")" + ".txt", reviewBuilder.toString());
+                    }
+                    consultBuilder = Consult.htmlBuilder(productCode);
+
+                    if (consultBuilder != null) {
+                        FileUtils.write(FileUtils.getDir() + "评论(" + categoryName + ")" + ".txt", consultBuilder.toString());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+            urlAddrs.clear();
+            actionDesc = crawlerActionInfo.getActionDesc();
+            crawlerArticles = detailPageProcessor.process(baseUrlAddr, addrs);
+            FileUtils.write(actionDesc,crawlerArticles);
+        }
 
 
     }
