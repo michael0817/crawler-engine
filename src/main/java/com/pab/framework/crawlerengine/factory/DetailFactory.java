@@ -21,6 +21,7 @@ public final class DetailFactory {
                 return new HuxiuDetail();
             case "www.wdzj.com":
                 return new WdzjDetail();
+
         }
         return null;
     }

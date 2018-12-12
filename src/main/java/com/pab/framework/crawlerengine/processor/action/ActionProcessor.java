@@ -4,6 +4,7 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -12,6 +13,7 @@ import java.util.List;
  */
 public interface ActionProcessor {
 
-    List<String> getUrlAddrs(CrawlerActionInfo crawlerActionInfo);
-    void process(Integer actionId) throws IOException;
+    List<String> getUrls(List<CrawlerActionInfo> crawlerActionInfos, Map<Integer,List<String>> urlAddrs) throws IOException;
+    Map<Integer,List<String>> getUrlAddrs(List<CrawlerActionInfo> crawlerActionInfos);
+    void process(List<Integer> actionIds) throws IOException;
 }

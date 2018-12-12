@@ -11,8 +11,8 @@ import us.codecraft.webmagic.processor.PageProcessor;
 import us.codecraft.webmagic.proxy.Proxy;
 import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 import us.codecraft.webmagic.selector.Html;
-import us.codecraft.webmagic.selector.Selectable;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 public class DetailUrlsPageProcessor implements PageProcessor {
 
     private Site site = Site.me().setRetryTimes(3).setSleepTime(1000);
-    private List<String> all;
+    private List<String> all=null;
     private String regex;
 
     public void setRegex(String regex) {
@@ -30,16 +30,14 @@ public class DetailUrlsPageProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
+        all=new LinkedList<>();
         page.setCharset("utf-8");
         Html html = page.getHtml();
-        Selectable links = html.links();
+        all.addAll(html.xpath("a/@href").all());
         if (StringUtils.isNotEmpty(regex)) {
-            all = html.xpath("a/@href").all();
-            all= all.stream().filter(a ->a.matches(regex)).collect(Collectors.toList());
-
+            all = all.stream().filter(a -> a.matches(regex)).collect(Collectors.toList());
         } else {
             //手机数据暂时逻辑
-            all = html.xpath("a/@href").all();
             int size = all.size();
             String href;
             for (int i = 0; i < size; i++) {
@@ -74,18 +72,5 @@ public class DetailUrlsPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
-
-    /**
-     * /chinese/newShouDoc/\w+.html
-     * /nifa/\d+/\d+/\d+/index.html
-     * /nifa/\d+/\d+/\d+/index.html|http://www.pbc.gov.cn/goutongjiaoliu/\d+/\d+/\d+/index.html
-     * http://www.51kaxun.com/news/13\d{3}.html
-     * //www.wdzj.com/news/yc/343\d{2}1\d{1}.html
-     * /Detail/report?id=\d+&amp;isfree=\d+
-     * <p>
-     * http://www.bugutime.com/news/\d+.html
-     *
-     * @param args
-     */
 
 }

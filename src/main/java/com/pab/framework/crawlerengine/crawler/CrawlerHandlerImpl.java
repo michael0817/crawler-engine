@@ -16,7 +16,6 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerdb.domain.CrawlerArticle;
 import com.pab.framework.crawlerdb.domain.CrawlerNewsMilestone;
 import com.pab.framework.crawlerengine.processor.DetailPageProcessor;
-import com.pab.framework.crawlerengine.util.CrawlerUtil;
 import com.pab.framework.crawlerengine.util.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -43,7 +42,7 @@ public class CrawlerHandlerImpl implements CrawlerHandler {
         String baseUrlAddr = crawlerActionInfo.getBaseUrlAddr();
         Integer urlType = crawlerActionInfo.getUrlType();
         String urlAddr = crawlerActionInfo.getUrlAddr();
-        int actionId = CrawlerUtil.extractIntOfStr(urlAddr, "[", "]");
+        int actionId=crawlerActionInfo.getActionId();
         int actionType = crawlerActionInfo.getActionType();
         crawerActionDynamicInfoDao.deleteAll(actionId);
         int size = urlAddrs.size();
@@ -105,7 +104,6 @@ public class CrawlerHandlerImpl implements CrawlerHandler {
             }
 
         } else {
-            urlAddrs.clear();
             actionDesc = crawlerActionInfo.getActionDesc();
             crawlerArticles = detailPageProcessor.process(baseUrlAddr, addrs);
             FileUtils.write(actionDesc,crawlerArticles);

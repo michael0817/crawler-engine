@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -24,9 +25,11 @@ public class FlowDetailProcessorImpl implements FlowDetailProcessor {
     @Override
     public void process(Integer flowId) throws IOException {
         List<CrawlerFlowDetail> crawlerFlowDetails = crawlerFlowDetailDao.findAllByFlowId(flowId);
+        List<Integer> actionIds=new LinkedList<>();
         for (CrawlerFlowDetail crawlerFlowDetail : crawlerFlowDetails) {
-             actionProcessor.process(crawlerFlowDetail.getActionId());
+            actionIds.add(crawlerFlowDetail.getActionId());
         }
+        actionProcessor.process(actionIds);
 
     }
 
