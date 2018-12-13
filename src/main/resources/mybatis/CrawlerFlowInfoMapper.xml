@@ -6,7 +6,7 @@
         <result column="flow_desc" jdbcType="VARCHAR" property="flowDesc"/>
     </resultMap>
     <select id="findAll" resultMap="crawlerFlowInfo">
-        select flow_id, flow_desc from crawler_flow_info
+        select flow_id, flow_desc from crawler_flow_info where flow_id
     </select>
     <select id="findOne" resultMap="crawlerFlowInfo">
         select flow_id, flow_desc from crawler_flow_info where flow_id=#{flowId}
