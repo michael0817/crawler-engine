@@ -105,8 +105,11 @@ public class CrawlerHandlerImpl implements CrawlerHandler {
 
         } else {
             actionDesc = crawlerActionInfo.getActionDesc();
-            crawlerArticles = detailPageProcessor.process(baseUrlAddr, addrs);
-            FileUtils.write(actionDesc,crawlerArticles);
+            String crawlerRegex = crawlerActionInfo.getCrawlerRegex();
+            crawlerArticles = detailPageProcessor.process(crawlerRegex,baseUrlAddr, addrs);
+            if (!crawlerArticles.isEmpty()){
+                FileUtils.write(actionDesc,crawlerArticles);
+            }
         }
 
 

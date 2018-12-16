@@ -3,6 +3,8 @@ package com.pab.framework.crawlerengine.processor.flow;
 import com.pab.framework.crawlerdb.dao.CrawlerFlowDetailDao;
 import com.pab.framework.crawlerdb.domain.CrawlerFlowDetail;
 import com.pab.framework.crawlerengine.processor.action.ActionProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +23,7 @@ public class FlowDetailProcessorImpl implements FlowDetailProcessor {
 
     @Autowired
     private ActionProcessor actionProcessor;
-
+   private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Override
     public void process(Integer flowId) throws IOException {
         List<CrawlerFlowDetail> crawlerFlowDetails = crawlerFlowDetailDao.findAllByFlowId(flowId);

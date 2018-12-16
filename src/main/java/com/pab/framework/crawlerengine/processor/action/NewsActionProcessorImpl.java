@@ -7,7 +7,6 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerengine.crawler.CrawlerHandler;
 import com.pab.framework.crawlerengine.processor.DetailPageProcessor;
 import com.pab.framework.crawlerengine.processor.DetailUrlsPageProcessor;
-import com.pab.framework.crawlerengine.processor.LoginDetailUrlsPageProcessor;
 import com.pab.framework.crawlerengine.util.CrawlerUtil;
 import com.pab.framework.crawlerengine.util.UrlUtils;
 import org.slf4j.Logger;
@@ -32,8 +31,7 @@ public class NewsActionProcessorImpl implements ActionProcessor {
     private DetailUrlsPageProcessor detailUrlsPageProcessor;
     @Autowired
     private DetailPageProcessor detailPageProcessor;
-    @Autowired
-    private LoginDetailUrlsPageProcessor loginDetailUrlsPageProcessor;
+
     @Autowired
     private CrawlerActionInfoDao crawlerActionInfoDao;
     @Autowired
@@ -45,17 +43,16 @@ public class NewsActionProcessorImpl implements ActionProcessor {
 
 
     @Override
-    public List<String> getUrls(List<CrawlerActionInfo> crawlerActionInfos, Map<Integer,List<String>> urlAddrs) throws IOException {
+    public List<String> getUrls(List<CrawlerActionInfo> crawlerActionInfos, Map<Integer, List<String>> urlAddrs) throws IOException {
 
-        List<String> addrs=new LinkedList<>();
+        List<String> addrs = new LinkedList<>();
         CrawlerActionInfo info;
         for (CrawlerActionInfo crawlerActionInfo : crawlerActionInfos) {
             Integer actionType = crawlerActionInfo.getActionType();
-            if (3==actionType){
-                String baseUrlAddr = crawlerActionInfo.getBaseUrlAddr();
+            if (3 == actionType) {
                 String urlAddr = crawlerActionInfo.getUrlAddr();
                 int actionId = CrawlerUtil.extractIntOfStr(urlAddr, "[", "]");
-                info= crawlerActionInfoDao.findCrawlerActionInfo(actionId);
+                info = crawlerActionInfoDao.findCrawlerActionInfo(actionId);
                 String crawlerRegex = info.getCrawlerRegex();
                 List<String> process = detailUrlsPageProcessor.process(crawlerRegex, urlAddrs.get(actionId));
                 addrs.addAll(process);
@@ -68,31 +65,46 @@ public class NewsActionProcessorImpl implements ActionProcessor {
     }
 
     @Override
-    public  Map<Integer,List<String>> getUrlAddrs(List<CrawlerActionInfo> crawlerActionInfos) {
-        List<String>    urlAddrs;
-        Map<Integer,List<String>>             map=new HashMap<>();
+    public Map<Integer, List<String>> getUrlAddrs(List<CrawlerActionInfo> crawlerActionInfos) {
+        List<String> urlAddrs;
+        Map<Integer, List<String>> map = new HashMap<>();
         for (CrawlerActionInfo crawlerActionInfo : crawlerActionInfos) {
             Integer actionType = crawlerActionInfo.getActionType();
-            if (2==actionType){
-
-                urlAddrs= new LinkedList<>();
+            if (2 == actionType) {
+                urlAddrs = new LinkedList<>();
                 String urlAddr = crawlerActionInfo.getUrlAddr();
                 String prefix = urlAddr.substring(0, urlAddr.indexOf("{"));
                 String suffix = urlAddr.substring(urlAddr.indexOf("}") + 1);
                 int index = UrlUtils.maxPage(urlAddr);
                 String baseUrlAddr = crawlerActionInfo.getBaseUrlAddr();
                 Integer actionId = crawlerActionInfo.getActionId();
-                for (int i = 1; i <= index; i++) {
-
-                    //雪球网零时处理
-                    if ("https://xueqiu.com".equals(baseUrlAddr)) {
-                        prefix = "/v4/statuses/user_timeline.json?page=";
-                        suffix = "&user_id=7558914709";
+                Integer urlType = crawlerActionInfo.getUrlType();
+                //加载更多零时逻辑
+                if (urlType == 2) {
+                    if ("http://www.iresearch.com.cn".equals(baseUrlAddr)) {
+                        prefix = "/products/GetReportList";
+                        suffix = "?classId=70&fee=0&date=&lastId=&pageSize=" + index;
+                        urlAddrs.add(baseUrlAddr + prefix + suffix);
+                        map.put(actionId, urlAddrs);
                     }
-                    urlAddrs.add(baseUrlAddr + prefix + i + suffix);
-                    map.put(actionId,urlAddrs);
+                }
+                //艾瑞金融零时处理
+                else {
+                    for (int i = 1; i <= index; i++) {
+                        //雪球网零时处理
+                        if ("https://xueqiu.com".equals(baseUrlAddr)) {
+                            prefix = "/v4/statuses/user_timeline.json";
+                            suffix = "?user_id=7558914709&page=" + i;
+                            urlAddrs.add(baseUrlAddr + prefix + suffix);
+                            map.put(actionId, urlAddrs);
+                        } else {
+                            urlAddrs.add(baseUrlAddr + prefix + i + suffix);
+                            map.put(actionId, urlAddrs);
+                        }
+                    }
                 }
             }
+
         }
 
         return map;
@@ -101,7 +113,7 @@ public class NewsActionProcessorImpl implements ActionProcessor {
     @Override
     public void process(List<Integer> actionIds) throws IOException {
         List<CrawlerActionInfo> crawlerActionInfos = crawlerActionInfoDao.findCrawlerActionInfos(actionIds);
-        Map<Integer,List<String>> urlAddrs = getUrlAddrs(crawlerActionInfos);
+        Map<Integer, List<String>> urlAddrs = getUrlAddrs(crawlerActionInfos);
         getUrls(crawlerActionInfos, urlAddrs);
     }
 }

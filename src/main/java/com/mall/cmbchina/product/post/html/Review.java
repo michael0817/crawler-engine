@@ -116,9 +116,6 @@ public final  class Review {
         return builder;
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
 
-        System.out.println(Review.htmlBuilder("S1H-50T-2PF-06_015"));
-    }
 
 }

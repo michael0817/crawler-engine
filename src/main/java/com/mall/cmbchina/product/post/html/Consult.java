@@ -119,10 +119,6 @@ public final class Consult {
 
         return builder;
     }
-    public static void main(String[] args) throws IOException, InterruptedException {
-        //401345
-//S1H-50T-2PF-06_015
-        System.out.println(Consult.htmlBuilder("S1H-50T-2PF-06_015"));
-    }
+
 
 }

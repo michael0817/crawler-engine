@@ -21,7 +21,4 @@ public final  class Scale {
         return document.body().html();
     }
 
-    public static void main(String[] args) throws IOException, InterruptedException {
-        System.out.println(Scale.getScale("S1H-50T-2PF-06_015"));
-    }
 }

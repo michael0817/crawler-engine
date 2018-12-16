@@ -16,6 +16,7 @@ public class Categories implements PageProcessor {
     @Override
     public void process(Page page) {
         Html html = page.getHtml();
+        System.out.println(html);
         Document document = html.getDocument();
         Element element = document.getElementsByAttribute("c3id").get(0);
          subcategory =element.attr("c3id");
