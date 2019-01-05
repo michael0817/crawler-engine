@@ -1,6 +1,7 @@
 package com.pab.framework.crawlerengine.task;
 
 import com.pab.framework.crawlerengine.processor.flow.FlowProcessor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,20 @@ import java.util.concurrent.ExecutorService;
 @Component
 @Configurable
 @EnableScheduling
+@Slf4j
 public class NewsTaskHandler implements TaskHandler {
     @Autowired
     ExecutorService threadFactory;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private FlowProcessor flowProcessor;
-    @Scheduled(cron = "0  0 8 * * ?")
+    @Scheduled(cron = "0 0 8 * * ?")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    flowProcessor.start();
+                    flowProcessor.run();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

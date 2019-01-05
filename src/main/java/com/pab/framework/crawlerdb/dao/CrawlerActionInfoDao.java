@@ -9,4 +9,5 @@ import java.util.List;
 public interface CrawlerActionInfoDao {
  CrawlerActionInfo findCrawlerActionInfo(Integer actionId);
  List<CrawlerActionInfo> findCrawlerActionInfos(List<Integer> actionIds);
+ Integer findFlowId(Integer actionId);
 }

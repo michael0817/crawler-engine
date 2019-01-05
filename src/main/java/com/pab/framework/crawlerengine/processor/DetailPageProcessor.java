@@ -94,7 +94,7 @@ public class DetailPageProcessor implements PageProcessor {
         }
         else{
             JSONObject jsonObject = JSON.parseObject(page.getRawText());
-             JSONArray jsonArray = jsonObject.getJSONArray("List");
+            JSONArray jsonArray = jsonObject.getJSONArray("List");
             int size = jsonArray.size();
             for (int i = 0; i < size; i++) {
                 jsonObject=jsonArray.getJSONObject(i);
@@ -143,7 +143,7 @@ public class DetailPageProcessor implements PageProcessor {
             }
         }
         domain = CrawlerUtil.domainStr((url_addrs[0]));
-        Spider spider = Spider.create(this).addUrl(url_addrs).thread(url_addrs.length);
+        Spider spider = Spider.create(this).addUrl(url_addrs);
         spider.run();
         if (Spider.Status.Stopped.compareTo(spider.getStatus()) == 0) {
             return crawlerArticles;

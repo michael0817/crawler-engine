@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public interface ActionProcessor {
 
-    List<String> getUrls(List<CrawlerActionInfo> crawlerActionInfos, Map<Integer,List<String>> urlAddrs) throws IOException;
-    Map<Integer,List<String>> getUrlAddrs(List<CrawlerActionInfo> crawlerActionInfos);
-    void process(List<Integer> actionIds) throws IOException;
+//    List<String> getUrls(List<CrawlerActionInfoDto> crawlerActionInfos, Map<Integer,List<String>> urlAddrs) throws IOException;
+//    Map<Integer,List<String>> getUrlAddrs(List<CrawlerActionInfoDto> crawlerActionInfos);
+    boolean process(CrawlerActionInfo crawlerActionInfo);
 }

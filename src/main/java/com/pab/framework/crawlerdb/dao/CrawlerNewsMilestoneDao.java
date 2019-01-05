@@ -7,7 +7,7 @@ import java.util.List;
 
 @Mapper
 public interface CrawlerNewsMilestoneDao {
-   int insertAll(CrawlerNewsMilestone crawlerNewsMilestone);
+   int save(CrawlerNewsMilestone crawlerNewsMilestone);
    List<String> findUrlAddrsByNewDate(Integer actionId);
    int  isExistsUrl(CrawlerNewsMilestone crawlerNewsMilestone);
 

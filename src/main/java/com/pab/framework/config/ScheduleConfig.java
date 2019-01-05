@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.db;
+package com.pab.framework.config;
 
 import com.pab.framework.crawlerengine.task.TaskHandler;
 import org.springframework.beans.factory.annotation.Autowired;

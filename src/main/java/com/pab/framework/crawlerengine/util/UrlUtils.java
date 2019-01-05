@@ -1,21 +1,34 @@
 package com.pab.framework.crawlerengine.util;
 
+import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.processor.example.BaiduBaikePageProcessor;
+import us.codecraft.webmagic.processor.example.ZhihuPageProcessor;
 
 import javax.net.ssl.*;
 import java.io.IOException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Component
+@Slf4j
 public final class UrlUtils {
+
+    private static final String pagePrefix = "{";
+    private static final String pageSubfix = "}";
+    private static final String pageSplit = "~";
 
     /**
      * 信任任何站点，实现https页面的正常访问
@@ -59,14 +72,49 @@ public final class UrlUtils {
         }
     }
 
-    public static int maxPage(String urlAddr) {
-        Pattern pattern = Pattern.compile("\\d+}");
-        Matcher matcher = pattern.matcher(urlAddr);
-        if (matcher.find()) {
-            String group = matcher.group();
-            return Integer.parseInt(group.substring(0, group.length() - 1));
+//    public static int maxPage(String urlAddr) {
+//        Pattern pattern = Pattern.compile("\\d+}");
+//        Matcher matcher = pattern.matcher(urlAddr);
+//        if (matcher.find()) {
+//            String group = matcher.group();
+//            return Integer.parseInt(group.substring(0, group.length() - 1));
+//        }
+//        return -1;
+//    }
+
+    public static int getStartPageIndex(String urlAddr){
+        try {
+            if(urlAddr.indexOf(pagePrefix)<0){
+                return 0;
+            }
+            String start = urlAddr.substring(urlAddr.indexOf(pagePrefix) + 1, urlAddr.indexOf(pageSplit));
+            return Integer.parseInt(start);
+        }catch(Exception e){
+            log.error("页码解析出错", e);
+            return -1;
         }
-        return -1;
+    }
+
+    public static int getEndPageIndex(String urlAddr){
+        try {
+            if(urlAddr.indexOf(pageSubfix)<0){
+                return 0;
+            }
+            String end = urlAddr.substring(urlAddr.indexOf(pageSplit) + 1, urlAddr.indexOf(pageSubfix));
+            return Integer.parseInt(end);
+        }catch(Exception e){
+            log.error("页码解析出错", e);
+            return -1;
+        }
+    }
+
+    public static String getUrlWithPageIndex(String urlAddr, int index){
+        try {
+            return urlAddr.substring(0, urlAddr.indexOf(pagePrefix))+index+urlAddr.substring(urlAddr.indexOf(pageSubfix)+1);
+        }catch(Exception e){
+            log.error("翻页地址转换出错", e);
+            return "";
+        }
     }
 
     public static StringBuffer getAhref(String str) {
@@ -85,4 +133,26 @@ public final class UrlUtils {
         return stringBufferResult;
     }
 
+    public static void main(String[] args){
+
+        Spider spider = Spider.create(new BaiduBaikePageProcessor()).thread(2);
+        String urlTemplate = "http://baike.baidu.com/search/word?word=%s&pic=1&sug=1&enc=utf8";
+        ResultItems resultItems = (ResultItems)spider.get(String.format(urlTemplate, "水力发电"));
+        System.out.println(resultItems);
+        List<String> list = new ArrayList();
+        list.add(String.format(urlTemplate, "风力发电"));
+        list.add(String.format(urlTemplate, "太阳能"));
+        list.add(String.format(urlTemplate, "地热发电"));
+        list.add(String.format(urlTemplate, "地热发电"));
+        List<ResultItems> resultItemses = spider.getAll(list);
+        Iterator var6 = resultItemses.iterator();
+
+        while(var6.hasNext()) {
+            ResultItems resultItemse = (ResultItems)var6.next();
+            System.out.println(resultItemse.getAll());
+        }
+
+        spider.close();
+
+    }
 }

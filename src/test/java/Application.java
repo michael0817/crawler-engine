@@ -1,30 +1,41 @@
+import com.pab.framework.crawlerdb.dao.CrawlerFlowDetailDao;
+import com.pab.framework.crawlerengine.service.ProxyService;
 import com.pab.framework.crawlerengine.CrawlerEngineApplication;
-import com.pab.framework.crawlerengine.db.ScheduleConfig;
-import com.pab.framework.crawlerengine.task.NewsTaskHandler;
+import com.pab.framework.crawlerengine.processor.flow.FlowProcessor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
+
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = CrawlerEngineApplication.class)
 public class Application {
     @Autowired
-    private NewsTaskHandler newsTaskHandler;
+    private FlowProcessor flowProcessor;
     @Autowired
-    private ScheduleConfig scheduleConfig;
+    private ProxyService proxyConfig;
+    @Autowired
+    private CrawlerFlowDetailDao crawlerFlowDetailDao;
 
     @Test
     public void test() {
-        //    newsTaskHandler.taskRun();
-        scheduleConfig.setCron("0  0 8 * * ?");
-        while (true) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        try {
+            flowProcessor.run();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testProxy(){
+        proxyConfig.getNewProxyIp();
+    }
+
+    @Test
+    public void testDb(){
+        crawlerFlowDetailDao.findNextAction(1);
     }
 }

@@ -7,7 +7,7 @@ spring:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.jdbc.Driver
-      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=utf8
+      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
       username: root
       password: Password123!
       initialSize: 1
@@ -32,3 +32,13 @@ spring:
       connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
       # 合并多个DruidDataSource的监控数据
       #useGlobalDataSourceStat: true
+threads:
+  corePoolSize: 20
+  maximumPoolSize: 100
+  keepAliveTime: 0
+  blockingQueueSize: 100
+proxy:
+  authUrl: http://120.52.79.8/haipAuth/auth/token
+  proxyUrl: http://120.52.79.8/haipBus/haip/fetchOne?crawlerId=
+  id: pabccrawler
+  token: IkGd1jh=

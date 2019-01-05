@@ -1,6 +1,6 @@
 package com.pab.framework.crawlerdb.dao;
 
-import com.pab.framework.crawlerdb.domain.CrawerActionDynamicInfo;
+import com.pab.framework.crawlerdb.domain.CrawlerActionDynamicInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -8,9 +8,9 @@ import java.util.List;
  * Created by fando on 2018/11/4 17:04
  */
 @Mapper
-public interface CrawerActionDynamicInfoDao {
+public interface CrawlerActionDynamicInfoDao {
     void deleteAll(int actionId);
-    int insertAll(CrawerActionDynamicInfo crawerActionDynamicInfo);
+    int save(CrawlerActionDynamicInfo crawerActionDynamicInfo);
     List<String> findAllUrlAddr(int actionId);
 
 }

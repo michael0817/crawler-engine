@@ -1,13 +1,13 @@
 logging:
   level:
     root: info
-    com.pab.framework: debug
+    com.pab.framework: info
 spring:
   datasource:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC&allowMultiQueries=true&useSSL=false
+      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
       username: crawler
       password: Crawler123!
       initialSize: 1
@@ -33,7 +33,12 @@ spring:
       # 合并多个DruidDataSource的监控数据
       #useGlobalDataSourceStat: true
 threads:
-  corePoolSize: 50
-  maximumPoolSize: 200
+  corePoolSize: 10
+  maximumPoolSize: 20
   keepAliveTime: 0
   blockingQueueSize: 100
+proxy:
+  authUrl: http://120.52.79.8/haipAuth/auth/token
+  proxyUrl: http://120.52.79.8/haipBus/haip/fetchOne?crawlerId=
+  id: pabccrawler
+  token: IkGd1jh=

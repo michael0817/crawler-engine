@@ -11,7 +11,7 @@ import java.io.IOException;
  */
 public interface FlowProcessor extends BaseProcessor {
 
-    void start() throws IOException;
+    void run() throws IOException;
 
 
 }

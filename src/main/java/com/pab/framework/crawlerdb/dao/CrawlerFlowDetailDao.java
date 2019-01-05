@@ -10,4 +10,5 @@ import java.util.List;
 public interface CrawlerFlowDetailDao {
     List<CrawlerFlowDetail> findAll();
     List<CrawlerFlowDetail> findAllByFlowId(Integer flowId);
+    List<CrawlerFlowDetail> findNextAction(Integer actionId);
 }

@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerengine.db;
+package com.pab.framework.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;

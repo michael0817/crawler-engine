@@ -25,6 +25,11 @@
         </foreach>
         </where>
     </select>
+
+    <select id="findFlowId" resultType="int">
+      select flow_id from crawler_flow_detail
+      <where>action_id=#{actionId}</where>
+    </select>
 </mapper>
 
 
