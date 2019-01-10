@@ -2,8 +2,8 @@ package com.mall.cmbchina.domain;
 
 import com.pab.framework.crawlerdb.common.BaseEntity;
 
-public class Category  extends BaseEntity {
-    private  String subcategory;
+public class Category extends BaseEntity {
+    private String subcategory;
     private String categoryName;
     private int dateId;
 

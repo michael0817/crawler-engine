@@ -5,10 +5,14 @@ import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
-
 @Mapper
 public interface CrawlerFlowDetailDao {
+
     List<CrawlerFlowDetail> findAll();
-    List<CrawlerFlowDetail> findAllByFlowId(Integer flowId);
-    List<CrawlerFlowDetail> findNextAction(Integer actionId);
+
+    List<CrawlerFlowDetail> findAllByFlowId(int paramInt);
+
+    List<CrawlerFlowDetail> findNextAction(int paramInt);
+
+    int findFlowIdByActionId(int paramInt);
 }

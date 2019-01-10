@@ -26,19 +26,19 @@ public final class Consult {
     private static final Map<String, String> map = new HashMap<>();
 
 
-    public  static StringBuilder getConsultList(String productCode) throws IOException, InterruptedException {
+    public static StringBuilder getConsultList(String productCode) throws IOException, InterruptedException {
 
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
-        HttpEntity entity= HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
+        HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
-        Elements  recordEles=document.getElementsByTag("em");
-        int size=recordEles.size();
-        if (size>0){
-            Element recordEle=recordEles.get(0);
-            String record =recordEle.text();
-            int pageSize =elements.size();
+        Elements recordEles = document.getElementsByTag("em");
+        int size = recordEles.size();
+        if (size > 0) {
+            Element recordEle = recordEles.get(0);
+            String record = recordEle.text();
+            int pageSize = elements.size();
             map.put("pageSize", String.valueOf(pageSize));
             map.put("record", record);
             StringBuilder builder = new StringBuilder();
@@ -56,7 +56,7 @@ public final class Consult {
 
     }
 
-    public  static StringBuilder getConsultList(String productCode, String record, String pageSize) throws IOException, InterruptedException {
+    public static StringBuilder getConsultList(String productCode, String record, String pageSize) throws IOException, InterruptedException {
         int maxPage = 0;
         int page = Integer.parseInt(pageSize);
         int num = Integer.parseInt(record);
@@ -74,7 +74,7 @@ public final class Consult {
             list.add(new BasicNameValuePair("pageIndex", atomicInteger.get() + ""));
             list.add(new BasicNameValuePair("pageSize", pageSize));
 
-            entity=HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
+            entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
             document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
             elements = document.getElementsByTag("dl");
             int size = elements.size();
@@ -92,7 +92,7 @@ public final class Consult {
         list.add(new BasicNameValuePair("productCode", productCode));
         list.add(new BasicNameValuePair("pageSize", pageSize));
 
-        HttpEntity entity=HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
+        HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetConsultList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
         StringBuilder builder = new StringBuilder();
@@ -104,16 +104,16 @@ public final class Consult {
         return builder;
     }
 
-    public  static StringBuilder htmlBuilder(String productCode) throws IOException, InterruptedException {
+    public static StringBuilder htmlBuilder(String productCode) throws IOException, InterruptedException {
         StringBuilder builder = getConsultList(productCode);
         String pageSize = map.get("pageSize");
         String record = map.get("record");
-        if (pageSize!=null&&record!=null){
+        if (pageSize != null && record != null) {
             if (Integer.parseInt(pageSize) > 0 && Integer.parseInt(record) > 0) {
-                builder.append(getConsultList(productCode,record,pageSize ));
+                builder.append(getConsultList(productCode, record, pageSize));
             }
             if (Integer.parseInt(pageSize) > 0) {
-                builder.append(getConsultList(productCode,pageSize ));
+                builder.append(getConsultList(productCode, pageSize));
             }
         }
 

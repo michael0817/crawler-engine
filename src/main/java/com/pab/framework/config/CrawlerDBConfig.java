@@ -1,11 +1,10 @@
 package com.pab.framework.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,8 +21,9 @@ import java.sql.SQLException;
 @SuppressWarnings("AlibabaRemoveCommentedCode")
 @Configuration
 @MapperScan(basePackages = CrawlerDBConfig.PACKAGE, sqlSessionFactoryRef = "crawlerSqlSessionFactory")
+@Slf4j
 public class CrawlerDBConfig {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
+
     static final String PACKAGE = "com.pab.framework.crawlerdb.dao";
     static final String MAPPER_LOCATION = "classpath*:mybatis/**/*.xml";
     static final String DOMAIN_PACKAGE = "com.pab.framework.crawlerdb.domain";
@@ -82,7 +82,7 @@ public class CrawlerDBConfig {
     @Value("{spring.datasource.crawler.connectionProperties}")
     private String connectionProperties;
 
-    @Bean(name="crawlerDataSource")   //声明其为Bean实例
+    @Bean(name = "crawlerDataSource")   //声明其为Bean实例
     public DataSource crawlerDataSource() {
         DruidDataSource datasource = new DruidDataSource();
 
@@ -107,7 +107,7 @@ public class CrawlerDBConfig {
         try {
             datasource.setFilters(filters);
         } catch (SQLException e) {
-            logger.error("druid configuration initialization filter", e);
+            log.error("druid configuration initialization filter", e);
         }
         datasource.setConnectionProperties(connectionProperties);
 

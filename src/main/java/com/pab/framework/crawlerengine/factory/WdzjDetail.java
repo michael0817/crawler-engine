@@ -10,13 +10,13 @@ import us.codecraft.webmagic.selector.Selectable;
 
 public class WdzjDetail implements Detail {
     public String getTitle(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         String title = html.xpath("h1[@class='page-title']/text()").get();
         return title;
     }
 
     public String getDate(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         Selectable xpath = html.xpath("div[@class='page-time']");
         Document document = Jsoup.parse(xpath.get());
         return document.body().text();
@@ -24,7 +24,7 @@ public class WdzjDetail implements Detail {
     }
 
     public String getContent(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         Selectable xpath = html.xpath("div[@class='page-summary']");
         Document document = Jsoup.parse(xpath.get());
         Element body = document.body();
@@ -50,7 +50,7 @@ public class WdzjDetail implements Detail {
                 builder.append("\n");
             }
         }
-        return  builder.toString();
+        return builder.toString();
     }
 
 

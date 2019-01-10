@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.pab.framework.crawlerdb.dao.CrawlerActionDynamicInfoDao">
-    <delete id="deleteAll" parameterType="int">delete from  crawler_action_dynamic_info where action_id=#{action_id}</delete>
-    <insert id="save"  parameterType="com.pab.framework.crawlerdb.domain.CrawlerActionDynamicInfo">
-        insert into crawler_action_dynamic_info(action_id,content,oper_time)
-        values  (#{actionId},#{content},#{operTime})
+    <delete id="deleteAll" parameterType="int">
+        delete from crawler_action_dynamic_info where action_id=#{actionId}
+    </delete>
+    <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerActionDynamicInfo">
+        insert into crawler_action_dynamic_info(action_id,article,content,order_num,oper_time)
+        values (#{actionId},#{article},#{content},#{orderNum},#{operTime})
     </insert>
-    <select id="findAllUrlAddr"  resultType="string" parameterType="int">
-        select url_addr from crawler_action_dynamic_info where action_id=#{actionId}
+    <select id="findDynamicContents" resultType="string" parameterType="int">
+        select content from crawler_action_dynamic_info where action_id=#{actionId}
+        order by order_num ASC
     </select>
 </mapper>
 

@@ -7,6 +7,8 @@ import java.util.List;
 
 @Mapper
 public interface CrawlerFlowInfoDao {
+
     List<CrawlerFlowInfo> findAll();
-    CrawlerFlowInfo findOne(Integer flowId);
+
+    CrawlerFlowInfo findOne(int paramInt);
 }

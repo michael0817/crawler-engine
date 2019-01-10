@@ -14,9 +14,14 @@
     </select>
     <select id="findNextAction" resultMap="crawlerFlowDetail" parameterType="int">
         select flow_id, action_id,order_num from crawler_flow_detail
-        where flow_id=
-        (select flow_id from crawler_flow_detail where action_id=#{action_id})
-        and order_num=
-        (select order_num+1 from crawler_flow_detail where action_id=#{action_id})
+        where flow_id =
+        (select flow_id from crawler_flow_detail where action_id = #{actionId})
+        and order_num =
+        (select order_num+1 from crawler_flow_detail where action_id = #{actionId})
     </select>
+    <select id="findFlowIdByActionId" resultType="int" parameterType="int">
+        select flow_id from crawler_flow_detail
+        where action_id = #{actionId}
+    </select>
+
 </mapper>

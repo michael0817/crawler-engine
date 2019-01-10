@@ -12,7 +12,7 @@ public class IresearchDetail implements Detail {
     public String getTitle(Page page) {
         JSONObject jsonObject = JSON.parseObject(page.getRawText());
         final JSONArray jsonArray = jsonObject.getJSONArray("List");
-        jsonObject=jsonArray.getJSONObject(0);
+        jsonObject = jsonArray.getJSONObject(0);
         return jsonObject.getString("Title");
     }
 
@@ -20,7 +20,7 @@ public class IresearchDetail implements Detail {
     public String getDate(Page page) {
         JSONObject jsonObject = JSON.parseObject(page.getRawText());
         final JSONArray jsonArray = jsonObject.getJSONArray("List");
-        jsonObject=jsonArray.getJSONObject(0);
+        jsonObject = jsonArray.getJSONObject(0);
         return jsonObject.getString("Uptime");
     }
 
@@ -28,7 +28,7 @@ public class IresearchDetail implements Detail {
     public String getContent(Page page) {
         JSONObject jsonObject = JSON.parseObject(page.getRawText());
         final JSONArray jsonArray = jsonObject.getJSONArray("List");
-        jsonObject=jsonArray.getJSONObject(0);
+        jsonObject = jsonArray.getJSONObject(0);
         return jsonObject.getString("Content");
     }
 }

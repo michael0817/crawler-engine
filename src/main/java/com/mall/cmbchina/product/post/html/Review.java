@@ -20,21 +20,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Component
-public final  class Review {
+public final class Review {
     private static Map<String, String> map = new HashMap<>();
 
     public static StringBuilder getReviewList(String productCode) throws IOException, InterruptedException {
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
-        HttpEntity entity= HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
+        HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
-        Elements  recordEles=document.getElementsByTag("em");
-        int size=recordEles.size();
-        if (size>0){
-            Element recordEle=recordEles.get(0);
-            String record =recordEle.text();
-            int pageSize =elements.size();
+        Elements recordEles = document.getElementsByTag("em");
+        int size = recordEles.size();
+        if (size > 0) {
+            Element recordEle = recordEles.get(0);
+            String record = recordEle.text();
+            int pageSize = elements.size();
             map.put("pageSize", String.valueOf(pageSize));
             map.put("record", record);
             StringBuilder builder = new StringBuilder();
@@ -60,7 +60,7 @@ public final  class Review {
             maxPage = (num - 1) / page + 1;
         }
         StringBuilder builder = null;
-       List<NameValuePair> list = new LinkedList<>();
+        List<NameValuePair> list = new LinkedList<>();
 
         HttpEntity entity = null;
         Document document = null;
@@ -70,7 +70,7 @@ public final  class Review {
             list.add(new BasicNameValuePair("pageIndex", atomicInteger.get() + ""));
             list.add(new BasicNameValuePair("pageSize", pageSize));
 
-            entity=HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
+            entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
             document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
             elements = document.getElementsByTag("dl");
             int size = elements.size();
@@ -88,7 +88,7 @@ public final  class Review {
         list.add(new BasicNameValuePair("productCode", productCode));
         list.add(new BasicNameValuePair("pageSize", pageSize));
 
-        HttpEntity entity= HttpPostRequest.getEntity(list,"https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
+        HttpEntity entity = HttpPostRequest.getEntity(list, "https://ssl.mall.cmbchina.com/_CL5_/Product/GetReviewList");
         Document document = Jsoup.parse(EntityUtils.toString(entity, "UTF-8"));
         Elements elements = document.getElementsByTag("dl");
         StringBuilder builder = new StringBuilder();
@@ -104,18 +104,17 @@ public final  class Review {
         StringBuilder builder = getReviewList(productCode);
         String pageSize = map.get("pageSize");
         String record = map.get("record");
-        if (pageSize!=null&&record!=null){
+        if (pageSize != null && record != null) {
             if (Integer.parseInt(pageSize) > 0 && Integer.parseInt(record) > 0) {
-                builder.append(getReviewList(productCode,record,pageSize ));
+                builder.append(getReviewList(productCode, record, pageSize));
             }
             if (Integer.parseInt(pageSize) > 0) {
-                builder.append(getReviewList(productCode,pageSize ));
+                builder.append(getReviewList(productCode, pageSize));
             }
         }
 
         return builder;
     }
-
 
 
 }

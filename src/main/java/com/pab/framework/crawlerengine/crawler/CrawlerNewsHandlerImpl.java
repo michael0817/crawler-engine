@@ -1,12 +1,11 @@
 package com.pab.framework.crawlerengine.crawler;
 
-import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.JsonPath;
-import com.pab.framework.constant.Global;
-import com.pab.framework.crawlerengine.dto.CrawlerJobInfo;
 import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
+import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.vo.News;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,94 +18,93 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-/**
- * @author xumx
- * @date 2018/11/16
- */
+
 @Component
 @Slf4j
-public class CrawlerNewsHandlerImpl implements CrawlerHandler{
+public class CrawlerNewsHandlerImpl implements CrawlerHandler {
 
     private InheritableThreadLocal<Integer> urlType = new InheritableThreadLocal();
-    private InheritableThreadLocal<String> xpath = new InheritableThreadLocal();
+    private InheritableThreadLocal<String[]> regex = new InheritableThreadLocal();
     private InheritableThreadLocal<List<Cookie>> cookies = new InheritableThreadLocal();
 
     @Autowired
     ProxyService proxyService;
 
-    @Override
-    public List<String> handler(CrawlerJobInfo crawlerJobInfo) throws Exception{
-        this.xpath.set(crawlerJobInfo.getRegex());
-        this.urlType.set(crawlerJobInfo.getUrlType());
-        Spider spider = Spider.create(this).thread(4);
-//        List<Proxy> proxyList = getProxyList();
-//        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
-//        if(proxyList!=null && proxyList.size() > 0) {
-//            httpClientDownloader.setProxyProvider(new SimpleProxyProvider(proxyList));
-//            spider.setDownloader(httpClientDownloader);
-//        }
-        List<String> targetUrlList = new ArrayList();
-        for(String url : crawlerJobInfo.getUrls()){
-            ResultItems resultItems = spider.get(url);
-            if(resultItems==null||resultItems.get(CrawlerContentTags.DYNAMIC_URLS) == null){
-                log.error("没有可爬取的内容,url:"+url+" regex:"+crawlerJobInfo.getRegex());
-            }else{
-                targetUrlList.addAll((List<String>)resultItems.get(CrawlerContentTags.DYNAMIC_URLS));
-                TimeUnit.SECONDS.sleep(1);
-            }
+    public List<News> handler(CrawlerJobInfo crawlerJobInfo)
+            throws Exception {
+        List<News> newsList = new ArrayList();
+        this.regex.set(crawlerJobInfo.getRegex().split("\\|\\|"));
+        if (this.regex.get().length != 4) {
+            throw new Exception("xpath数量不正确:" + this.regex.get().length);
         }
-        return targetUrlList;
+        this.urlType.set(crawlerJobInfo.getUrlType());
+        Spider spider = Spider.create(this).thread(1);
+
+
+        List<ResultItems> resultItemsList = spider.getAll(crawlerJobInfo.getUrls());
+        if ((resultItemsList == null) || (resultItemsList.size() == 0)) {
+            log.error("没有可爬取的内容,regex:" + crawlerJobInfo.getRegex());
+        } else {
+            for (ResultItems ri : resultItemsList) {
+                newsList.add(ri.get(News.class.getName()));
+            }
+            TimeUnit.SECONDS.sleep(1L);
+        }
+        return newsList;
     }
 
-    @Override
     public void process(Page page) {
         try {
-            List<String> nodeList = new ArrayList<String>();
-            if (urlType.get() == UrlTypeEnum.HTML.getLabel()) {
-                nodeList = page.getHtml().xpath(xpath.get()).all();
-            } else if (urlType.get() == UrlTypeEnum.JSON.getLabel()) {
-                String xpathStr = xpath.get().split(Global.CRAWLER_REGEX_SPLIT)[0];
-                String jsonpathStr = xpath.get().split(Global.CRAWLER_REGEX_SPLIT)[1];
-                DocumentContext dc = JsonPath.parse(page.getHtml().xpath(xpathStr).toString());
-                nodeList = dc.read(jsonpathStr);
+            News news = new News();
+            if (this.urlType.get().intValue() == UrlTypeEnum.HTML.getLabel()) {
+                if (StringUtils.isNotBlank(this.regex.get()[0])) {
+                    news.setTitle(page.getHtml().xpath(this.regex.get()[0]).get());
+                    if (StringUtils.isBlank(news.getTitle())) {
+                        news.setTitle("无标题");
+                    }
+                }
+                if (StringUtils.isNotBlank(this.regex.get()[1])) {
+                    news.setDate(page.getHtml().xpath(this.regex.get()[1]).get());
+                }
+                if (StringUtils.isNotBlank(this.regex.get()[2])) {
+                    news.setBrief(page.getHtml().xpath(this.regex.get()[2]).get());
+                }
+                if (StringUtils.isNotBlank(this.regex.get()[3])) {
+                    news.setContent(page.getHtml().xpath(this.regex.get()[3]).all());
+                    if (news.getContent().size() == 0) {
+                        news.getContent().add("该条新闻格式异常无法爬取，请直接访问下面的链接：");
+                        news.getContent().add(page.getUrl().toString());
+                    }
+                }
             }
-            page.putField(CrawlerContentTags.DYNAMIC_URLS, nodeList);
-        }catch(Exception e){
-            log.error("处理爬取内容失败:"+page.getUrl(),e);
+
+            page.putField(News.class.getName(), news);
+        } catch (Exception e) {
+            log.error("处理爬取内容失败:" + page.getUrl(), e);
         }
     }
 
-    @Override
+
     public Site getSite() {
-        Site site = Site.me().setRetryTimes(10)
-                .setSleepTime(1000)
-                .setRetrySleepTime(1000)
-                .setTimeOut(5000)
-                .setUseGzip(true)
-                .addHeader("User-Agent",
-                        "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
-        for(Cookie cookie : cookies.get()){
-            site.addCookie(cookie.getName(), cookie.getValue());
+        Site site = Site.me().setRetryTimes(10).setSleepTime(1000).setRetrySleepTime(1000).setTimeOut(5000).setUseGzip(true).addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+
+        if (this.cookies.get() != null) {
+            for (Cookie cookie : this.cookies.get()) {
+                site.addCookie(cookie.getName(), cookie.getValue());
+            }
         }
         return site;
     }
-
 
     public static void main(String[] args) throws Exception {
         CrawlerNewsHandlerImpl chi = new CrawlerNewsHandlerImpl();
         CrawlerJobInfo cji = new CrawlerJobInfo();
         List<String> urls = new ArrayList();
-        urls.add("https://xueqiu.com/v4/statuses/user_timeline.json?user_id=7558914709&page=1");
+
+        urls.add("https://www.wdzj.com/news/yc/3693772.html");
         cji.setUrls(urls);
-        cji.setUrlType(2);
-        cji.setRegex("//body/text()||$..target");
-        //chi.handler("http://www.nifa.org.cn/nifa/2955686/2955720/e9b7b132/index3.html","//td[@id='list']//a[@target='_blank']/@href");
-        //chi.handler("https://www.wdzj.com/", 1,"//div[@class='tabclist on']/ul[@class='newslist']//a[2]/@href");
-        //chi.handler("http://www.iresearch.com.cn/products/GetReportList?classId=70&fee=0&date=&lastId=", 2,"//body||$..VisitUrl");
-        //doHttpGet("https://xueqiu.com/v4/statuses/user_timeline.json?user_id=7558914709&page=1");
-        //getCookies("https://xueqiu.com");
-        //chi.handler("https://www.huxiu.com/member/1453857/article/1.html", 1,"//div[@id='per_center'//div[@class='mob-ctt']/h3/a/@href");
+        cji.setUrlType(Integer.valueOf(UrlTypeEnum.HTML.getLabel()));
+        cji.setRegex("/html/body//h1[@class='page-title']/text()||/html/body//div[@class='page-time']/span[2]/text()||/html/body//div[@class='page-summary']/div/text()||/html/body//div[@class='page-content']/p/allText()");
         chi.handler(cji);
     }
-
 }

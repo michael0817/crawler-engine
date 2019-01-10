@@ -16,21 +16,21 @@ import us.codecraft.webmagic.selector.Selectable;
 public class KaxunDetail implements Detail {
 
     public String getTitle(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         String title = html.xpath("h1[@class='nr01_tit']/text()").get();
         return title;
     }
 
     @Override
     public String getDate(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         String date = html.xpath("p[@class='right01_date']/text(2)").get();
         return date;
     }
 
     @Override
     public String getContent(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         Selectable xpath = html.xpath("div[@class='right01_nr']");
         Document document = Jsoup.parse(xpath.get());
         Element body = document.body();

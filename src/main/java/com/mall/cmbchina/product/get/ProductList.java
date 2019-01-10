@@ -20,9 +20,10 @@ public class ProductList implements PageProcessor {
         subCategory = document.getElementById("subCategory").val();
         totalPageNumber = document.getElementById("totalPageNumber").val();
     }
-//"https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subcategory + "&pushwebview=1"
-    public Product process(String uri,String subcategory ){
-        return process(uri+subcategory,subcategory);
+
+    //"https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subcategory + "&pushwebview=1"
+    public Product process(String uri, String subcategory) {
+        return process(uri + subcategory, subcategory);
     }
 
     public Product process(String subcategory) {

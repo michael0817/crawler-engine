@@ -14,24 +14,24 @@ import us.codecraft.webmagic.selector.Selectable;
  * @since 0.3.2
  */
 @Component
-public class NifaDetail implements  Detail {
+public class NifaDetail implements Detail {
 
-    public String getTitle(Page page){
-        Html html=page.getHtml();
-        String title=html.xpath( "td[@class='dabiaoti']/text()").get();
+    public String getTitle(Page page) {
+        Html html = page.getHtml();
+        String title = html.xpath("td[@class='dabiaoti']/text()").get();
         return title;
     }
 
     @Override
     public String getDate(Page page) {
-        Html html=page.getHtml();
-        String date=html.xpath( "td[@class='zi8']/text()").get();
+        Html html = page.getHtml();
+        String date = html.xpath("td[@class='zi8']/text()").get();
         return date;
     }
 
     @Override
     public String getContent(Page page) {
-        Html html=page.getHtml();
+        Html html = page.getHtml();
         StringBuilder builder = new StringBuilder();
         Selectable xpath = html.xpath("td[@id='zhengwen']");
         Document document = Jsoup.parse(xpath.get());
@@ -40,7 +40,7 @@ public class NifaDetail implements  Detail {
         int size = elements.size();
         for (int i = 0; i < size; i++) {
             body = elements.get(i);
-            if ("p".equals(body.nodeName())){
+            if ("p".equals(body.nodeName())) {
                 builder.append(body.text());
                 builder.append("\n");
             }

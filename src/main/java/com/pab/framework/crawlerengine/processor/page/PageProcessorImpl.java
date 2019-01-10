@@ -20,8 +20,8 @@ public class PageProcessorImpl implements PageProcessor {
         try {
             Html html = page.getHtml();
             System.out.println(html);
-        }catch(Exception e){
-            log.error("爬取出错:"+page.getUrl(),e);
+        } catch (Exception e) {
+            log.error("爬取出错:" + page.getUrl(), e);
         }
     }
 
@@ -30,7 +30,7 @@ public class PageProcessorImpl implements PageProcessor {
         return site;
     }
 
-    public void spiderRun(String url){
+    public void spiderRun(String url) {
 //        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
 //        httpClientDownloader.setProxyProvider(SimpleProxyProvider.from(
 //                new Proxy("35.198.185.132",80),

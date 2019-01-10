@@ -2,11 +2,12 @@ logging:
   level:
     root: error
     com.pab.framework: info
+    us.codecraft.webmagic.downloader: warn
 spring:
   datasource:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
-      driverClassName: com.mysql.jdbc.Driver
+      driverClassName: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
       username: root
       password: Password123!
@@ -42,3 +43,6 @@ proxy:
   proxyUrl: http://120.52.79.8/haipBus/haip/fetchOne?crawlerId=
   id: pabccrawler
   token: IkGd1jh=
+pdf:
+  news:
+    path: /opt/crawler-data/pdf/news/

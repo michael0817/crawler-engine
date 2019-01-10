@@ -14,34 +14,32 @@ import java.util.LinkedList;
 import java.util.List;
 
 public final class Desc {
-//S1H-M0I-2OQ_220
-    public  static  String getDesc(String productCode) throws IOException, InterruptedException {
-   return getDesc("https://ssl.mall.cmbchina.com/_CL5_/Product/GetDesc",productCode);
+    //S1H-M0I-2OQ_220
+    public static String getDesc(String productCode) throws IOException, InterruptedException {
+        return getDesc("https://ssl.mall.cmbchina.com/_CL5_/Product/GetDesc", productCode);
     }
-//"https://ssl.mall.cmbchina.com/_CL5_/Product/GetDesc"
-    public  static  String getDesc(String uri,String productCode) throws IOException, InterruptedException {
+
+    //"https://ssl.mall.cmbchina.com/_CL5_/Product/GetDesc"
+    public static String getDesc(String uri, String productCode) throws IOException, InterruptedException {
         StringBuilder builder = new StringBuilder();
         List<NameValuePair> list = new LinkedList<>();
         list.add(new BasicNameValuePair("productCode", productCode));
-        HttpEntity entity=HttpPostRequest.getEntity(list,uri);
+        HttpEntity entity = HttpPostRequest.getEntity(list, uri);
         InputStream is = entity.getContent();
-        InputStreamReader isr=new InputStreamReader(is);
-        BufferedReader br=new BufferedReader(isr);
+        InputStreamReader isr = new InputStreamReader(is);
+        BufferedReader br = new BufferedReader(isr);
         String line;
-        while((line=br.readLine())!=null){
+        while ((line = br.readLine()) != null) {
             builder.append(line);
         }
-        JSONObject jsonObject=JSONObject.parseObject(builder.toString());
+        JSONObject jsonObject = JSONObject.parseObject(builder.toString());
         return jsonObject.getString("Results");
     }
-
-
 
 
     public static void main(String[] args) throws IOException, InterruptedException {
         System.out.println(Desc.getDesc("S1H-M0I-2OQ_220"));
     }
-
 
 
 }

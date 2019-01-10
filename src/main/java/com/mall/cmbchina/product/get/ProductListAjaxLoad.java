@@ -14,7 +14,8 @@ public class ProductListAjaxLoad implements PageProcessor {
     private Site site = Site.me().setRetryTimes(3).setSleepTime(1000).setTimeOut(10000);
 
     private StringBuilder builder;
-    private  List<String> productCodes=new ArrayList<>();
+    private List<String> productCodes = new ArrayList<>();
+
     @Override
     public void process(Page page) {
         Html html = page.getHtml();
@@ -23,18 +24,18 @@ public class ProductListAjaxLoad implements PageProcessor {
         StringBuilder builder = new StringBuilder();
         for (Selectable node : nodes) {
             builder.append(node.get());
-            productCodes.add( node.xpath("span[@productid]/@productid").get());
+            productCodes.add(node.xpath("span[@productid]/@productid").get());
         }
         System.out.println(productCodes);
 
     }
 
     public StringBuilder getBuilder() {
-        return  Spider.Status.Stopped.compareTo(Spider.Status.Stopped) == 0?builder:null;
+        return Spider.Status.Stopped.compareTo(Spider.Status.Stopped) == 0 ? builder : null;
     }
 
     public List<String> getProductCodes() {
-        return   Spider.Status.Stopped.compareTo(Spider.Status.Stopped) == 0?productCodes:null;
+        return Spider.Status.Stopped.compareTo(Spider.Status.Stopped) == 0 ? productCodes : null;
     }
 
     @Override
@@ -43,10 +44,10 @@ public class ProductListAjaxLoad implements PageProcessor {
     }
 
     public void process(String subCategory, String pageIndex) {
-       process("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subCategory + "&pageIndex=" + pageIndex,subCategory,pageIndex);
+        process("https://ssl.mall.cmbchina.com/_CL5_/Product/ProductList?subcategory=" + subCategory + "&pageIndex=" + pageIndex, subCategory, pageIndex);
     }
 
-    public  void process(String uri,String subCategory, String pageIndex){
+    public void process(String uri, String subCategory, String pageIndex) {
         Spider spider = Spider.create(this).addUrl(uri).thread(5);
         spider.run();
     }

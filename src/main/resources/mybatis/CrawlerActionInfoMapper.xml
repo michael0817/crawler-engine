@@ -13,7 +13,7 @@
     <select id="findCrawlerActionInfo" resultMap="crawlerActionInfo" parameterType="int">
         select action_id, action_desc, action_type, url_type, url_addr, base_url_addr, crawler_regex from
         crawler_action_info
-        <where>action_id=#{actionId}</where>
+        where action_id=#{actionId}
     </select>
 
     <select id="findCrawlerActionInfos" resultMap="crawlerActionInfo">
@@ -28,7 +28,7 @@
 
     <select id="findFlowId" resultType="int">
       select flow_id from crawler_flow_detail
-      <where>action_id=#{actionId}</where>
+      where action_id=#{actionId}
     </select>
 </mapper>
 

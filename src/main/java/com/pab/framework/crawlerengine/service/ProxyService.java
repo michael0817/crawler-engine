@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,160 +21,140 @@ import us.codecraft.webmagic.proxy.Proxy;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
-/**
- * @author xumx
- * @date 2018/12/29
- */
 @Service
 @Slf4j
 public class ProxyService {
 
-//    proxy:
-//    authUrl: http://120.52.79.8/haipAuth/
-//    proxyUrl: http://120.52.79.8/haipBus/haip/fetchOne
-//    id: pabccrawler
-//    token: IkGd1jh=
     @Value("${proxy.authUrl}")
     private String authUrl;
+
     @Value("${proxy.proxyUrl}")
     private String proxyUrl;
+
     @Value("${proxy.id}")
     private String proxyId;
+
     @Value("${proxy.token}")
     private String proxyToken;
 
     private String tokenStr = "";
     private LocalDate tokenDate = null;
-    private Set<String> proxyIpSet = new HashSet<String>(5);
+    private Set<String> proxyIpSet = new java.util.HashSet(5);
 
     @Autowired
     ThreadService threadService;
 
-    public synchronized String getNewToken(){
+    public synchronized String getNewToken() {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
-        try{
+        try {
             httpClient = HttpClients.custom().setRetryHandler(new StandardHttpRequestRetryHandler()).build();
-            HttpPost httpPost = new HttpPost(authUrl);
-            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();//设置请求和传输超时时间
+            HttpPost httpPost = new HttpPost(this.authUrl);
+            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();
             httpPost.setConfig(requestConfig);
-            // 创建请求参数
-            List<NameValuePair> list = new LinkedList<>();
+
+            List<NameValuePair> list = new java.util.LinkedList();
             JSONObject jsonParam = new JSONObject();
-            jsonParam.put("id", proxyId);
-            jsonParam.put("code", proxyToken);
-            StringEntity paramEntity = new StringEntity(jsonParam.toString(),"utf-8");//解决中文乱码问题
+            jsonParam.put("id", this.proxyId);
+            jsonParam.put("code", this.proxyToken);
+            StringEntity paramEntity = new StringEntity(jsonParam.toString(), "utf-8");
             paramEntity.setContentEncoding("UTF-8");
             paramEntity.setContentType("application/json");
             httpPost.setEntity(paramEntity);
-            // 执行请求
+
             response = httpClient.execute(httpPost);
-            if(HttpStatus.SC_OK == response.getStatusLine().getStatusCode()){
-                // 获得响应的实体对象
-                HttpEntity entity = response.getEntity();
+            HttpEntity entity;
+            if (200 == response.getStatusLine().getStatusCode()) {
+                entity = response.getEntity();
                 String entityStr = EntityUtils.toString(entity, "UTF-8");
                 this.tokenStr = entityStr;
                 this.tokenDate = LocalDate.now();
-                log.info("获得"+this.tokenDate+"代理Token:"+this.tokenStr);
+                log.info("获得" + this.tokenDate + "代理Token:" + this.tokenStr);
                 return entityStr;
             }
             return null;
         } catch (Exception e) {
-            log.error("Http协议出现问题",e);
+            RequestConfig requestConfig;
+            log.error("Http协议出现问题", e);
             return null;
         } finally {
-            // 释放连接
             if (null != response) {
                 try {
                     response.close();
                     httpClient.close();
                 } catch (Exception e) {
-                    log.error("释放连接出错",e);
+                    log.error("释放连接出错", e);
                 }
             }
         }
     }
 
-    public String getToken(){
-        if(LocalDate.now()==this.tokenDate){
+    public String getToken() {
+        if (LocalDate.now() == this.tokenDate) {
             return this.tokenStr;
         }
         synchronized (this) {
-            if(LocalDate.now()==this.tokenDate) {
+            if (LocalDate.now() == this.tokenDate) {
                 return this.tokenStr;
             }
             return getNewToken();
         }
     }
 
-    public Set<String> getProxyIpSet(){
+    public Set<String> getProxyIpSet() {
         return this.proxyIpSet;
     }
 
-    public void getNewProxyIp(){
+    public void getNewProxyIp() {
         CloseableHttpClient httpClient = null;
         CloseableHttpResponse response = null;
         try {
             httpClient = HttpClients.custom().setRetryHandler(new StandardHttpRequestRetryHandler()).build();
-            HttpGet httpGet = new HttpGet(proxyUrl + proxyId);
-            RequestConfig requestConfig = RequestConfig.custom()
-                    .setSocketTimeout(5000)
-                    .setConnectTimeout(5000)
-                    .build();//设置请求和传输超时时间
+            HttpGet httpGet = new HttpGet(this.proxyUrl + this.proxyId);
+
+
+            RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000).build();
             httpGet.setConfig(requestConfig);
             httpGet.addHeader("haip-token", getToken());
-            // 执行请求
+
             response = httpClient.execute(httpGet);
-            if(HttpStatus.SC_OK == response.getStatusLine().getStatusCode()){
-                // 获得响应的实体对象
+            if (200 == response.getStatusLine().getStatusCode()) {
                 HttpEntity entity = response.getEntity();
                 String entityStr = EntityUtils.toString(entity, "UTF-8");
                 JSONObject jobj = JSONObject.parseObject(entityStr);
                 String proxyIp = jobj.getJSONObject("rs").getString("id");
-                if(StringUtils.isNotBlank(proxyIp)){
-                    log.info("获得代理地址:"+proxyIp);
+                if (StringUtils.isNotBlank(proxyIp)) {
+                    log.info("获得代理地址:" + proxyIp);
                     this.proxyIpSet.add(proxyIp);
                 }
             }
+            return;
         } catch (Exception e) {
-            log.error("Http协议出现问题",e);
+            log.error("Http协议出现问题", e);
         } finally {
-            // 释放连接
             if (null != response) {
                 try {
                     response.close();
                     httpClient.close();
                 } catch (Exception e) {
-                    log.error("释放连接出错",e);
+                    log.error("释放连接出错", e);
                 }
             }
         }
     }
 
-
     @PostConstruct
-    public void init(){
-        threadService.getExecutorService().execute(() -> {
-            while(true){
-                if(proxyIpSet.size()<3){
-                    getNewProxyIp();
-                    try {
-                        TimeUnit.SECONDS.sleep(1);
-                    } catch (InterruptedException e) {
-                        log.error("Sleep异常",e);
-                    }
-                }
-            }
-        });
+    public void init() {
     }
 
-    private List<Proxy> getProxyList(){
-        List<Proxy> proxyList = new ArrayList<Proxy>();
+    private List<Proxy> getProxyList() {
+        List<Proxy> proxyList = new ArrayList();
         try {
-            Set<String> ipSet = this.getProxyIpSet();
+            Set<String> ipSet = getProxyIpSet();
             for (String ip : ipSet) {
                 String[] ipArray = ip.split(":");
                 if (ipArray.length == 2) {
@@ -183,13 +162,13 @@ public class ProxyService {
                     proxyList.add(proxy);
                 }
             }
-        }catch(Exception e){
-            log.error("获取代理IP失败",e);
+        } catch (Exception e) {
+            log.error("获取代理IP失败", e);
         }
         return proxyList;
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println(LocalDate.now().toString());
     }
 }

@@ -1,18 +1,19 @@
 package com.pab.framework.crawlerengine.enums;
 
 public enum ActionTypeEnum {
-    CLICK(1),
-    TURNPAGE(2),
-    HTML(3),
-    COOKIE(4);
+
+    CLICK(Integer.valueOf(1)),
+    TURNPAGE(Integer.valueOf(2)),
+    COOKIE(Integer.valueOf(3)),
+    NEWS(Integer.valueOf(4));
 
     private Integer label;
 
-    ActionTypeEnum(Integer label){
+    ActionTypeEnum(Integer label) {
         this.label = label;
     }
 
-    public Integer getLabel(){
+    public Integer getLabel() {
         return this.label;
     }
 }

@@ -4,13 +4,13 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionDynamicInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-/**
- * Created by fando on 2018/11/4 17:04
- */
+
 @Mapper
 public interface CrawlerActionDynamicInfoDao {
-    void deleteAll(int actionId);
-    int save(CrawlerActionDynamicInfo crawerActionDynamicInfo);
-    List<String> findAllUrlAddr(int actionId);
 
+    void deleteAll(int paramInt);
+
+    int save(CrawlerActionDynamicInfo paramCrawlerActionDynamicInfo);
+
+    List<String> findDynamicContents(int paramInt);
 }

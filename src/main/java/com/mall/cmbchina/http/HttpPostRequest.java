@@ -13,7 +13,7 @@ import java.util.List;
 
 public final class HttpPostRequest {
 
-    public static HttpEntity getEntity(List<NameValuePair> list,String uri) throws IOException, InterruptedException {
+    public static HttpEntity getEntity(List<NameValuePair> list, String uri) throws IOException, InterruptedException {
         UrlEncodedFormEntity entityParam = new UrlEncodedFormEntity(list, "UTF-8");
         HttpPost httpPost = new HttpPost(uri);
         httpPost.addHeader("User-Agent", "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.7.6)");
