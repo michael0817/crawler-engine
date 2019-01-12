@@ -7,8 +7,10 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerdb.domain.CrawlerFlowDetail;
 import com.pab.framework.crawlerdb.domain.CrawlerFlowInfo;
 import com.pab.framework.crawlerdb.domain.CrawlerLog;
+import com.pab.framework.crawlerengine.constant.Global;
 import com.pab.framework.crawlerengine.processor.action.ActionProcessor;
 import com.pab.framework.crawlerengine.service.DbService;
+import com.pab.framework.crawlerengine.service.PdfService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,16 +32,18 @@ public class FlowProcessorImpl implements FlowProcessor {
     @Autowired
     private DbService dbService;
     @Autowired
+    private PdfService pdfService;
+    @Autowired
     private ActionProcessor actionProcessorImpl;
 
     public void run() {
         List<CrawlerFlowInfo> cfis = this.crawlerFlowInfoDao.findAll();
         for (CrawlerFlowInfo cfi : cfis) {
-            if (!"OFF".equalsIgnoreCase(cfi.getFlowSchedule())) {
+            if (!Global.CRAWLER_OFF.equalsIgnoreCase(cfi.getFlowSchedule())) {
                 boolean result = false;
                 List<CrawlerFlowDetail> cfds = this.crawlerFlowDetailDao.findAllByFlowId(cfi.getFlowId());
                 for (CrawlerFlowDetail cfd : cfds) {
-                    CrawlerActionInfo cai = this.crawlerActionInfoDao.findCrawlerActionInfo(cfd.getActionId());
+                    CrawlerActionInfo cai = this.crawlerActionInfoDao.findOne(cfd.getActionId());
                     result = this.actionProcessorImpl.process(cai);
                     if (!result) {
                         log.error("爬虫任务执行失败:" + cfi.getFlowDesc());
@@ -64,5 +68,7 @@ public class FlowProcessorImpl implements FlowProcessor {
                 }
             }
         }
+        pdfService.generateNewsFile();
+
     }
 }

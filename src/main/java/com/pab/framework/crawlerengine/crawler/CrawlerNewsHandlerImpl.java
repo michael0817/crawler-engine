@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.crawler;
 
+import com.pab.framework.crawlerengine.constant.Global;
 import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
 import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
@@ -33,7 +34,7 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
     public List<News> handler(CrawlerJobInfo crawlerJobInfo)
             throws Exception {
         List<News> newsList = new ArrayList();
-        this.regex.set(crawlerJobInfo.getRegex().split("\\|\\|"));
+        this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
         if (this.regex.get().length != 4) {
             throw new Exception("xpath数量不正确:" + this.regex.get().length);
         }

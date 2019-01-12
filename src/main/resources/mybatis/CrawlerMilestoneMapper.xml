@@ -4,12 +4,10 @@
     <select id="findMilestoneByActionId" resultType="string" parameterType="int">
         select milestone from crawler_milestone
         where action_id=#{actionId}
-        and crawler_date=(select max(crawler_date) from crawler_milestone)
-        limit 1
     </select>
     <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerMilestone">
-        insert into crawler_milestone(action_id,crawler_date,milestone)
-        values (#{actionId},#{crawlerDate},#{milestone})
-        on duplicate key update milestone=#{milestone};
+        insert into crawler_milestone(action_id, crawler_date, milestone)
+        values (#{actionId}, #{crawlerDate}, #{milestone})
+        on duplicate key update crawler_date = #{crawlerDate}, milestone=#{milestone};
     </insert>
 </mapper>

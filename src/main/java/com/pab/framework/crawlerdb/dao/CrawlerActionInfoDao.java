@@ -8,9 +8,7 @@ import java.util.List;
 @Mapper
 public interface CrawlerActionInfoDao {
 
-    CrawlerActionInfo findCrawlerActionInfo(int paramInt);
+    CrawlerActionInfo findOne(int actionId);
 
-    List<CrawlerActionInfo> findCrawlerActionInfos(List<Integer> paramList);
-
-    Integer findFlowId(int paramInt);
+    List<Integer> findByActionType(int actionType);
 }

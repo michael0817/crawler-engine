@@ -3,6 +3,7 @@ package com.pab.framework.crawlerengine.util;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-
+@Slf4j
 public class PdfUtil {
     public static final String CHARACTOR_FONT_CH_FILE = "MSYH.TTF";
     public static final Rectangle PAGE_SIZE = PageSize.A4;
@@ -42,9 +43,9 @@ public class PdfUtil {
             out = new FileOutputStream(file);
             PdfWriter.getInstance(this.document, out);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         }
         this.document.open();
     }
@@ -58,7 +59,7 @@ public class PdfUtil {
                 this.document.add(chapter);
             }
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         }
     }
 
@@ -114,9 +115,9 @@ public class PdfUtil {
             bfChinese = BaseFont.createFont(
                     CHARACTOR_FONT_CH_FILE, "Identity-H", true);
         } catch (DocumentException e) {
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         }
         return new Font(bfChinese, size, style, color);
     }
@@ -146,13 +147,14 @@ public class PdfUtil {
             }
             return;
         } catch (Exception e) {
-            System.out.println("读取PDF文件" + file.getAbsolutePath() + "生失败！" + e);
-            e.printStackTrace();
+            log.error("PDF处理出错", e);
         } finally {
             if (randomAccessRead != null) {
                 try {
                     randomAccessRead.close();
-                } catch (IOException localIOException2) {
+                } catch (IOException e) {
+                    log.error("PDF处理出错", e);
+
                 }
             }
         }

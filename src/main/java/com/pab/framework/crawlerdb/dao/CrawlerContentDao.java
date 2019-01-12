@@ -2,15 +2,17 @@ package com.pab.framework.crawlerdb.dao;
 
 import com.pab.framework.crawlerdb.domain.CrawlerContent;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
 public interface CrawlerContentDao {
 
-    int delete(CrawlerContent paramCrawlerContent);
+    int deleteByActionIdAndCrawlerDate(@Param("actionId")int actionId, @Param("crawlerDate")LocalDate crawlerDate);
 
     int save(CrawlerContent paramCrawlerContent);
 
-    List<CrawlerContent> findByActionIdAndDate(int paramInt1, int paramInt2);
+    List<CrawlerContent> findByActionIdAndCrawlerDate(@Param("actionId")int actionId, @Param("crawlerDate")LocalDate crawlerDate);
 }

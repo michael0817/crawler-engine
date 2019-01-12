@@ -1,5 +1,6 @@
 import com.pab.framework.crawlerengine.CrawlerEngineApplication;
 import com.pab.framework.crawlerengine.processor.flow.FlowProcessor;
+import com.pab.framework.crawlerengine.service.PdfService;
 import com.pab.framework.crawlerengine.service.ProxyService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,8 @@ public class Application {
     private FlowProcessor flowProcessor;
     @Autowired
     private ProxyService proxyConfig;
+    @Autowired
+    private PdfService pdfService;
 
     @Test
     public void test() {
@@ -31,4 +34,9 @@ public class Application {
         proxyConfig.getNewProxyIp();
     }
 
+
+    @Test
+    public void testPdf(){
+        pdfService.generateNewsFile();
+    }
 }

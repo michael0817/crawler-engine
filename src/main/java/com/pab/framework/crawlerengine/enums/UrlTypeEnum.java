@@ -8,7 +8,7 @@ public enum UrlTypeEnum {
 
     private int label;
 
-    UrlTypeEnum(Integer label) {
+    UrlTypeEnum(int label) {
         this.label = label;
     }
 

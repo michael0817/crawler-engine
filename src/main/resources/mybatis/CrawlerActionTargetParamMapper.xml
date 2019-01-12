@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pab.framework.crawlerdb.dao.CrawlerActionTargetParamDao">
+    <select id="findParamValue"
+            resultType="String" parameterType="com.pab.framework.crawlerdb.domain.CrawlerActionTargetParam">
+        select param_value from crawler_action_target_param
+        where action_id=#{actionId}
+        and param_type=#{paramType}
+        and param_name=#{paramName}
+    </select>
+    <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerActionTargetParam">
+        insert into crawler_action_target_param(action_id,param_type,param_name,param_value)
+        values (#{actionId},#{paramType},#{paramName},#{paramValue})
+        on duplicate key update param_value=#{paramValue};
+    </insert>
+</mapper>

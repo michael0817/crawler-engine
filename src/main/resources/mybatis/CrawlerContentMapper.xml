@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.pab.framework.crawlerdb.dao.CrawlerContentDao">
-    <delete id="delete" parameterType="com.pab.framework.crawlerdb.domain.CrawlerContent">
+    <delete id="deleteByActionIdAndCrawlerDate">
         delete from crawler_content where action_id=#{actionId} and crawler_date = #{crawlerDate}
     </delete>
     <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerContent">
-        insert into crawler_content(action_id,crawler_date,content)
-        values  (#{actionId},#{crawlerDate},#{content})
+        insert into crawler_content(action_id, action_type, crawler_date, content)
+        values  (#{actionId}, #{actionType}, #{crawlerDate},#{content})
     </insert>
     <select id="findByActionIdAndCrawlerDate" resultType="com.pab.framework.crawlerdb.domain.CrawlerContent">
-        select action_id,crawler_date,content from crawler_content where action_id=#{actionId} and crawler_date = #{crawlerDate}
+        select action_id, action_type, crawler_date, content from crawler_content
+        where action_id = #{actionId}
+        and crawler_date = #{crawlerDate}
     </select>
 </mapper>

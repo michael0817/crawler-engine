@@ -18,4 +18,9 @@ public class Global {
     public static final String CRAWLER_PAGE_PREFIX = "{";
     public static final String CRAWLER_PAGE_SUBFIX = "}";
     public static final String CRAWLER_PAGE_SPLIT = "~";
+    public static final String CRAWLER_MILESTONE_TYPE_ALL = "ALL";
+    public static final String CRAWLER_MILESTONE_TYPE_NEWEST = "NEWEST";
+    public static final String NEWS_PDF_FILE_NAME = "每日金融资讯";
+
+
 }
