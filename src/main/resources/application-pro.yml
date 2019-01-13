@@ -8,7 +8,8 @@ spring:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://101.132.187.131:3306/crawler_db?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
+      url: jdbc:mysql://101.89.92.192:3306/crawlerdb?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
+      &serverTimezone=Asia/Shanghai&useSSL=false
       username: root
       password: Password123!
       initialSize: 1
