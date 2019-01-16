@@ -1,6 +1,6 @@
 logging:
   level:
-    root: error
+    root: warn
     com.pab.framework: info
     us.codecraft.webmagic.downloader: warn
 spring:
@@ -8,8 +8,7 @@ spring:
     crawler:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://101.89.92.192:3306/crawlerdb?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true
-      &serverTimezone=Asia/Shanghai&useSSL=false
+      url: jdbc:mysql://101.89.92.192:3306/crawlerdb?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=Asia/Shanghai&useSSL=false
       username: root
       password: Password123!
       initialSize: 1
@@ -46,4 +45,4 @@ proxy:
   token: IkGd1jh=
 pdf:
   news:
-    path: /opt/crawler-data/pdf/news/
+    path: /Users/fjn/Desktop/pdf/news/

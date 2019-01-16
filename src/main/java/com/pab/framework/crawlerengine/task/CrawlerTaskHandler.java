@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.task;
 
+import com.pab.framework.crawlerengine.enums.FlowTypeEnum;
 import com.pab.framework.crawlerengine.processor.flow.FlowProcessor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,20 @@ import java.util.concurrent.ExecutorService;
 @Configurable
 @EnableScheduling
 @Slf4j
-public class NewsTaskHandler implements TaskHandler {
+public class CrawlerTaskHandler implements TaskHandler {
     @Autowired
     ExecutorService threadFactory;
     @Autowired
     private FlowProcessor flowProcessor;
 
-    @Scheduled(cron = "0 0 8 * * ?")
+    @Scheduled(cron = "0 17 10 * * MON-FRI")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {
             @Override
             public void run() {
                 try {
-                    flowProcessor.run();
+                    flowProcessor.run(FlowTypeEnum.NEWS);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

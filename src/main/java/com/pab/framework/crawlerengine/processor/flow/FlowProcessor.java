@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.processor.flow;
 
+import com.pab.framework.crawlerengine.enums.FlowTypeEnum;
 import com.pab.framework.crawlerengine.processor.BaseProcessor;
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.io.IOException;
  */
 public interface FlowProcessor extends BaseProcessor {
 
-    void run() throws IOException;
+    void run(FlowTypeEnum flowType) throws IOException;
 
 
 }

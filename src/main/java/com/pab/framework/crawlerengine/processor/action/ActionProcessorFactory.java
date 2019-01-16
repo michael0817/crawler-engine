@@ -1,0 +1,35 @@
+package com.pab.framework.crawlerengine.processor.action;
+
+import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
+import com.pab.framework.crawlerengine.enums.ActionTypeEnum;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+
+
+@Component
+@Slf4j
+public class ActionProcessorFactory {
+
+
+    @Resource
+    private ActionProcessor cookieActionProcessor;
+    @Resource
+    private ActionProcessor turnpageActionProcessor;
+    @Resource
+    private ActionProcessor newsActionProcessor;
+
+
+    public boolean process(CrawlerActionInfo cai) {
+        int actionType = cai.getActionType();
+        if (ActionTypeEnum.TURNPAGE.getLabel() == actionType)
+            return this.turnpageActionProcessor.actionHandler(cai);
+        if (ActionTypeEnum.COOKIE.getLabel() == actionType)
+            return this.cookieActionProcessor.actionHandler(cai);
+        if (ActionTypeEnum.NEWS.getLabel() == actionType) {
+            return this.newsActionProcessor.actionHandler(cai);
+        }
+        return false;
+    }
+}

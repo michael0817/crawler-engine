@@ -100,7 +100,7 @@ public class DbService {
         return null;
     }
 
-    public void setMilestone(String milestone, int actionId) {
+    public void saveMilestone(String milestone, int actionId) {
         try {
             CrawlerMilestone cm = new CrawlerMilestone();
             cm.setActionId(actionId);

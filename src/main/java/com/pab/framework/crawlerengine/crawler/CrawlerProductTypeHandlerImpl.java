@@ -10,18 +10,19 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.*;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Component
 @Slf4j
-public class CrawlerNewsHandlerImpl implements CrawlerHandler {
+public class CrawlerProductTypeHandlerImpl implements CrawlerHandler {
 
     private InheritableThreadLocal<Integer> urlType = new InheritableThreadLocal();
     private InheritableThreadLocal<String[]> regex = new InheritableThreadLocal();
@@ -84,7 +85,13 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
 
 
     public Site getSite() {
-        Site site = Site.me().setRetryTimes(10).setSleepTime(1000).setRetrySleepTime(1000).setTimeOut(5000).setUseGzip(true).addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36");
+        Site site = Site.me()
+                .setRetryTimes(10)
+                .setSleepTime(1000)
+                .setRetrySleepTime(1000)
+                .setTimeOut(5000)
+                .setUseGzip(true)
+                .setUserAgent("Mozilla/5.0 (Linux; Android 6.0.1; DUK-AL20 Build/MXC89K; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/44.0.2403.119 Mobile Safari/537.36");
 
         if (this.cookies.get() != null) {
             for (Cookie cookie : this.cookies.get()) {
@@ -95,11 +102,11 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
     }
 
     public static void main(String[] args) throws Exception {
-        CrawlerNewsHandlerImpl chi = new CrawlerNewsHandlerImpl();
+        CrawlerProductTypeHandlerImpl chi = new CrawlerProductTypeHandlerImpl();
         CrawlerJobInfo cji = new CrawlerJobInfo();
         List<String> urls = new ArrayList();
 
-        urls.add("https://www.wdzj.com/news/yc/369377299.html");
+        urls.add("https://ssl.mall.cmbchina.com/_CL5_/Category/GetAllCategories");
         cji.setUrls(urls);
         cji.setUrlType(Integer.valueOf(UrlTypeEnum.HTML.getLabel()));
         cji.setRegex("/html/body//h1[@class='page-title']/text()||/html/body//div[@class='page-time']/span[2]/text()||/html/body//div[@class='page-summary']/div/text()||/html/body//div[@class='page-content']/p/allText()");

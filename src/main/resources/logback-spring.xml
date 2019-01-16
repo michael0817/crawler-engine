@@ -23,12 +23,7 @@
         </layout>
     </appender>
 
-    <logger name="com.pab.framework.crawlerengine" additivity="false">
-        <appender-ref ref="console"/>
-        <appender-ref ref="logFile"/>
-    </logger>
-
-    <root level="error">
+    <root level="info">
         <appender-ref ref="console"/>
         <appender-ref ref="logFile"/>
     </root>

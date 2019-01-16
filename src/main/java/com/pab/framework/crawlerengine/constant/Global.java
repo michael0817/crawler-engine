@@ -6,6 +6,8 @@ package com.pab.framework.crawlerengine.constant;
  */
 public class Global {
     public static final String CRAWLER_OFF = "OFF";
+    public static final String CRAWLER_MILESTONE_SPLIT = "\\|\\|";
+    public static final String CRAWLER_MILESTONE_SPLIT_STR = "||";
     public static final String CRAWLER_REGEX_SPLIT1 = "\\|\\|";
     public static final String CRAWLER_REGEX_SPLIT2 = "#=#";
     public static final String DYNAMIC_ACTION_PREFIX = "[";
