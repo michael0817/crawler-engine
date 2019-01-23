@@ -13,4 +13,10 @@
         where action_id = #{actionId}
         and crawler_date = #{crawlerDate}
     </select>
+
+    <select id="findByActionTypeAndCrawlerDate" resultType="com.pab.framework.crawlerdb.domain.CrawlerContent">
+        select action_id, action_type, crawler_date, content from crawler_content
+        where action_type = #{actionType}
+        and crawler_date = #{crawlerDate}
+    </select>
 </mapper>

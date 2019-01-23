@@ -43,6 +43,5 @@ proxy:
   proxyUrl: http://120.52.79.8/haipBus/haip/fetchOne?crawlerId=
   id: pabccrawler
   token: IkGd1jh=
-pdf:
-  news:
-    path: /Users/fjn/Desktop/pdf/news/
+news:
+  path: /crawler/data/news/

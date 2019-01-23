@@ -3,6 +3,7 @@ package com.pab.framework.crawlerengine.vo;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 @Data
 /**
@@ -10,8 +11,12 @@ import java.util.List;
  * 爬取动作执行入参
  */
 public class CrawlerJobInfo {
-    //待爬取的url列表
-    private List<String> urls;
+    //待爬取的get url列表
+    private List<String> getUrls;
+    //待爬取的post url
+    private String postUrl;
+    //待爬取的url入参（post）
+    private List<Map<String,String>> paramList;
     //爬取动作类型
     private int actionType;
     //url类型

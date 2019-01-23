@@ -1,4 +1,4 @@
-package com.pab.framework.config;
+package com.pab.framework.crawlercore.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import lombok.extern.slf4j.Slf4j;

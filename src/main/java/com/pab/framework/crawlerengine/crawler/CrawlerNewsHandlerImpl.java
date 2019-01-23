@@ -1,6 +1,6 @@
 package com.pab.framework.crawlerengine.crawler;
 
-import com.pab.framework.crawlerengine.constant.Global;
+import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
 import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
@@ -10,13 +10,14 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import us.codecraft.webmagic.*;
+import us.codecraft.webmagic.Page;
+import us.codecraft.webmagic.ResultItems;
+import us.codecraft.webmagic.Site;
+import us.codecraft.webmagic.Spider;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 
 @Component
@@ -39,7 +40,7 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
         }
         this.urlType.set(crawlerJobInfo.getUrlType());
         Spider spider = Spider.create(this).thread(4);
-        List<ResultItems> resultItemsList = spider.getAll(crawlerJobInfo.getUrls());
+        List<ResultItems> resultItemsList = spider.getAll(crawlerJobInfo.getGetUrls());
         if ((resultItemsList == null) || (resultItemsList.size() == 0)) {
             log.error("没有可爬取的内容,regex:" + crawlerJobInfo.getRegex());
         } else {
@@ -100,7 +101,7 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
         List<String> urls = new ArrayList();
 
         urls.add("https://www.wdzj.com/news/yc/369377299.html");
-        cji.setUrls(urls);
+        cji.setGetUrls(urls);
         cji.setUrlType(Integer.valueOf(UrlTypeEnum.HTML.getLabel()));
         cji.setRegex("/html/body//h1[@class='page-title']/text()||/html/body//div[@class='page-time']/span[2]/text()||/html/body//div[@class='page-summary']/div/text()||/html/body//div[@class='page-content']/p/allText()");
         chi.handler(cji);

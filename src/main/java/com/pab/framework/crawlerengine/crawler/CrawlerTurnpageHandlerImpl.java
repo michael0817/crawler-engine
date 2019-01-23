@@ -32,11 +32,9 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
             throws Exception {
         this.regex.set(crawlerJobInfo.getRegex());
         this.urlType.set(crawlerJobInfo.getUrlType());
-        Spider spider = Spider.create(this).thread(4);
-
-
+        Spider spider = Spider.create(this).thread(1);
         List<DynamicInfo> dynamicUrls = new ArrayList();
-        for (Object url : crawlerJobInfo.getUrls()) {
+        for (Object url : crawlerJobInfo.getGetUrls()) {
             ResultItems resultItems = spider.get((String) url);
             if ((resultItems == null) || (resultItems.get(DynamicInfo.class.getName()) == null)) {
                 log.error("没有可爬取的内容,url:" + url + " regex:" + crawlerJobInfo.getRegex());
@@ -87,7 +85,7 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
         CrawlerJobInfo cji = new CrawlerJobInfo();
         List<String> urls = new ArrayList();
         urls.add("https://www.wdzj.com");
-        cji.setUrls(urls);
+        cji.setGetUrls(urls);
         cji.setUrlType(Integer.valueOf(1));
         cji.setRegex("//div[@class='tabclist on']/ul[@class='newslist']//a[@title]");
         chi.handler(cji);

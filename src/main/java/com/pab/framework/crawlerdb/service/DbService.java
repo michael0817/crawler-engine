@@ -1,8 +1,9 @@
-package com.pab.framework.crawlerengine.service;
+package com.pab.framework.crawlerdb.service;
 
 import com.alibaba.fastjson.JSON;
 import com.pab.framework.crawlerdb.dao.*;
 import com.pab.framework.crawlerdb.domain.*;
+import com.pab.framework.crawlerengine.enums.ActionTypeEnum;
 import com.pab.framework.crawlerengine.vo.DynamicInfo;
 import com.pab.framework.crawlerengine.vo.News;
 import lombok.extern.slf4j.Slf4j;
@@ -116,6 +117,7 @@ public class DbService {
         for (News news : newsList) {
             CrawlerContent cc = new CrawlerContent();
             cc.setActionId(actionId);
+            cc.setActionType(ActionTypeEnum.NEWS.getLabel());
             cc.setCrawlerDate(date);
             cc.setContent(JSON.toJSONString(news));
             this.crawlerContentDao.save(cc);
@@ -140,6 +142,10 @@ public class DbService {
 
     public List<CrawlerContent> getContentByActionIdAndCrawlerDate(int actionId, LocalDate crawlerDate) {
         return this.crawlerContentDao.findByActionIdAndCrawlerDate(actionId, crawlerDate);
+    }
+
+    public List<CrawlerContent> getContentByActionTypeAndCrawlerDate(int actionType, LocalDate crawlerDate) {
+        return this.crawlerContentDao.findByActionTypeAndCrawlerDate(actionType, crawlerDate);
     }
 
     public void saveLog(CrawlerLog cl) {

@@ -1,4 +1,4 @@
-//package com.pab.framework.config;
+//package com.pab.framework.crawlercore.config;
 //
 //import com.pab.framework.crawlerengine.task.TaskHandler;
 //import org.springframework.beans.factory.annotation.Autowired;

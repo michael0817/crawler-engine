@@ -1,5 +1,6 @@
 package com.pab.framework.crawlerengine.crawler;
 
+import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
 import com.pab.framework.crawlerengine.util.HttpUtil;
 import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
@@ -27,6 +28,15 @@ public class CrawlerAddressHandlerImpl implements CrawlerHandler {
 
     public static void main(String[] args)
             throws Exception {
+
+//        CrawlerAddressHandlerImpl chi = new CrawlerAddressHandlerImpl();
+//        CrawlerJobInfo cji = new CrawlerJobInfo();
+//        List<String> urls = new ArrayList();
+//
+//        urls.add("http://www.stats.gov.cn/tjsj/tjbz/tjyqhdmhcxhfdm/2017/31.html");
+//        cji.setUrls(urls);
+//        chi.handler(cji);
+
         File folder = new File("/Users/fjn/Desktop/www.stats.gov.cn");
         File outputFile = new File("/Users/fjn/Desktop/output.txt");
         FileOutputStream fos = new FileOutputStream(outputFile);
@@ -37,7 +47,8 @@ public class CrawlerAddressHandlerImpl implements CrawlerHandler {
                     while (s.hasNextLine()) {
                         String line = s.nextLine();
                         if ((!line.contains("url")) && (!line.contains("title")) && (!line.contains("虚拟"))) {
-                            fos.write((line.replaceAll("村民委员会", "").replaceAll("居委会", "").replaceAll("委会", "") + "\r\n").getBytes());
+                            fos.write((line.replaceAll("村民委员会", "").replaceAll("村委会", "").replaceAll("居委会", "") +
+                                    "\r\n").getBytes());
                         }
                     }
                 }
@@ -50,7 +61,7 @@ public class CrawlerAddressHandlerImpl implements CrawlerHandler {
     public List<Object> handler(CrawlerJobInfo crawlerJobInfo) {
         Spider spider = Spider.create(this).thread(20).addPipeline(new us.codecraft.webmagic.pipeline.FilePipeline("/Users/fjn/Desktop"));
         List<Object> targetUrlList = new ArrayList();
-        for (Object obj : crawlerJobInfo.getUrls()) {
+        for (Object obj : crawlerJobInfo.getGetUrls()) {
             spider.addUrl(new String[]{(String) obj}).run();
         }
         return targetUrlList;
@@ -93,4 +104,5 @@ public class CrawlerAddressHandlerImpl implements CrawlerHandler {
         }
         return site;
     }
+
 }

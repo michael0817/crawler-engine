@@ -3,7 +3,8 @@ package com.pab.framework.crawlerengine.service;
 import com.alibaba.fastjson.JSON;
 import com.itextpdf.text.*;
 import com.pab.framework.crawlerdb.domain.CrawlerContent;
-import com.pab.framework.crawlerengine.constant.Global;
+import com.pab.framework.crawlerdb.service.DbService;
+import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.enums.ActionTypeEnum;
 import com.pab.framework.crawlerengine.util.PdfUtil;
 import com.pab.framework.crawlerengine.vo.News;
@@ -28,7 +29,7 @@ public class PdfService {
     private static Font textFont = PdfUtil.createCHineseFont(10.0F, 0, new BaseColor(0, 0, 0));
     private static final String PDF_SUBFIX = ".pdf";
 
-    @Value("${pdf.news.path}")
+    @Value("${news.path}")
     private String pdfNewsFolder;
     @Autowired
     DbService dbService;

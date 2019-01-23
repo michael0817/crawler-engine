@@ -1,111 +1,19 @@
-//package com.pab.framework.crawlerengine.util;
-//
-//import org.apache.commons.lang.StringEscapeUtils;
-//import org.jsoup.nodes.Element;
-//import org.jsoup.select.Elements;
-//
-//import java.net.URLDecoder;
-//import java.net.URLEncoder;
-//import java.util.regex.Matcher;
-//import java.util.regex.Pattern;
-//
-//
-//public final class CrawlerUtil {
-//
-//    public static int countWords(String str, String word) {
-//        int count = 0;
-//        for (int i = str.length() - 1; i >= 0; i--) {
-//            if (str.regionMatches(i, word, 0, word.length())) {
-//                count++;
-//            }
-//        }
-//        return count;
-//    }
-//
-//    public static String getText(Element element) {
-//        Elements children = element.children();
-//        int size = children.size();
-//        if (!children.isEmpty()) {
-//            for (int i = 0; i < size; i++) {
-//                element = children.get(i);
-//                getText(element);
-//            }
-//        }
-//        return element.text();
-//    }
-//
-//    public static String domainStr(String url) {
-//        return url.split("/")[2];
-//    }
-//
-//    public static String htmlTransStr(String str) {
-//        Pattern pattern = Pattern.compile(">[^<]+<");
-//        Matcher matcher = pattern.matcher(str);
-//        StringBuilder builder = new StringBuilder(str.length());
-//        if (matcher.find()) {
-//            str = matcher.group();
-//            builder.append(str);
-//        }
-//        str = builder.toString();
-//        str = str.trim();
-//        if (!str.isEmpty()) {
-//            str = str.substring(1, str.length() - 1);
-//            str = StringEscapeUtils.unescapeHtml(str);
-//            str = str.replaceAll("<>", "");
-//            return str;
-//        }
-//        return null;
-//    }
-//
-//
-//    public static int extractIntOfStr(String str, String begin, String end) {
-//        if (str == null) {
-//            return -1;
-//        }
-//        int index = Integer.parseInt(str.substring(str.indexOf(begin) + 1, str.indexOf(end)));
-//        return index;
-//    }
-//
-//
-//    public static String hanDecode(String inputst, String regex, String replacement)
-//            throws Exception {
-//        String ed2 = inputst.replaceAll(regex, replacement);
-//        String ed3 = URLDecoder.decode(ed2, "UTF-8");
-//        return URLDecoder.decode(ed3, "UTF-8");
-//    }
-//
-//
-//    public static String decodeHan(String inputst, String regex, String replacement)
-//            throws Exception {
-//        String sout = "";
-//        if (inputst.contains("/")) {
-//            String[] sts = inputst.split("/");
-//            for (int i = 0; i < sts.length; i++) {
-//                sout = sout + URLEncoder.encode(sts[i], "UTF-8");
-//                sout = sout + "/";
-//            }
-//
-//            sout = sout.substring(0, sout.length() - 1);
-//        } else {
-//            sout = URLEncoder.encode(inputst, "UTF-8");
-//        }
-//        return sout.replaceAll(regex, replacement);
-//    }
-//
-//
-//    public static StringBuilder getAhref(String str) {
-//        StringBuilder stringBufferResult = new StringBuilder();
-//        for (int i = 0; i < str.length(); i++) {
-//            char chr = str.charAt(i);
-//            if (chr == '%') {
-//                StringBuilder stringTmp = new StringBuilder();
-//                stringTmp.append(str.charAt(i + 1)).append(str.charAt(i + 2));
-//                stringBufferResult.append((char) Integer.valueOf(stringTmp.toString(), 16).intValue());
-//                i += 2;
-//            } else {
-//                stringBufferResult.append(chr);
-//            }
-//        }
-//        return stringBufferResult;
-//    }
-//}
+package com.pab.framework.crawlerengine.util;
+
+import com.pab.framework.crawlercore.constant.Global;
+
+import java.util.List;
+
+public final class CrawlerUtil {
+
+    public static void replaceDynamicContent(String urlPattern, List<String> contentList){
+
+    }
+
+    public static int getActionId(String urlPattern) throws NumberFormatException{
+        String action = urlPattern.substring(urlPattern.indexOf(Global.DYNAMIC_ACTION_PREFIX) + 1, urlPattern.indexOf
+                (Global.DYNAMIC_ACTION_SUBFIX));
+        return Integer.parseInt(action.replace(Global.DYNAMIC_ACTION_KEYWORD,""));
+
+    }
+}

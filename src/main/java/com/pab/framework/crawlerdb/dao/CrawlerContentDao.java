@@ -15,4 +15,9 @@ public interface CrawlerContentDao {
     int save(CrawlerContent paramCrawlerContent);
 
     List<CrawlerContent> findByActionIdAndCrawlerDate(@Param("actionId")int actionId, @Param("crawlerDate")LocalDate crawlerDate);
+
+    List<CrawlerContent> findByActionTypeAndCrawlerDate(@Param("actionType")int actionType, @Param("crawlerDate")
+            LocalDate
+            crawlerDate);
+
 }

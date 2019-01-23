@@ -3,15 +3,14 @@ package com.pab.framework.crawlerengine.processor.action;
 import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerdb.domain.CrawlerLog;
 import com.pab.framework.crawlerengine.cache.ICache;
-import com.pab.framework.crawlerengine.constant.Global;
+import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.crawler.CrawlerHandler;
 import com.pab.framework.crawlerengine.enums.ActionTargetParamNameEnum;
 import com.pab.framework.crawlerengine.enums.ActionTargetParamTypeEnum;
-import com.pab.framework.crawlerengine.service.DbService;
+import com.pab.framework.crawlerdb.service.DbService;
 import com.pab.framework.crawlerengine.util.UrlUtil;
 import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
 import com.pab.framework.crawlerengine.vo.DynamicInfo;
-import com.pab.framework.crawlerengine.vo.News;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.cookie.Cookie;
@@ -54,7 +53,7 @@ public class TurnpageActionProcessor implements ActionProcessor{
         }
         try {
             CrawlerJobInfo cji = new CrawlerJobInfo();
-            cji.setUrls(turnpageUrlList);
+            cji.setGetUrls(turnpageUrlList);
             cji.setActionType(Integer.valueOf(cai.getActionType()));
             cji.setUrlType(Integer.valueOf(cai.getUrlType()));
             cji.setRegex(cai.getCrawlerRegex());
@@ -76,17 +75,30 @@ public class TurnpageActionProcessor implements ActionProcessor{
                         ActionTargetParamTypeEnum.MILESTONE.getLabel()
                         ,ActionTargetParamNameEnum.SAVE_TYPE.getLabel());
                 if(Global.CRAWLER_MILESTONE_TYPE_ALL.equalsIgnoreCase(milestoneSaveType)){
-                    //去重
+                    //全量更新，需要去重
                     List msList = Arrays.asList(milestone.split(Global.CRAWLER_MILESTONE_SPLIT));
+                    if(msList.size()==1&&msList.get(0).equals("")){
+                        msList = new ArrayList();
+                    }
                     Set<String> msSet = new HashSet(msList);
+                    Object[] array = diList.toArray();
                     Iterator<DynamicInfo> it = diList.iterator();
                     try {
+                        for(int i = 0; i < array.length; i++){
+                            if(!msSet.contains(diList.get(i))) {
+                                if(msList.size()<=i){
+                                    msList.add(((DynamicInfo)array[i]).getContent());
+                                }else{
+                                    msList.set(i,((DynamicInfo)array[i]).getContent());
+                                }
+                            }
+
+                        }
                         while (it.hasNext()) {
                             String currContent = it.next().getContent();
                             if (msSet.contains(currContent)) {
                                 it.remove();
                             }
-                            msSet.add(currContent);
                         }
                     }catch(ConcurrentModificationException ex){
                     }
@@ -95,8 +107,7 @@ public class TurnpageActionProcessor implements ActionProcessor{
                     this.dbService.updateDynamicInfos(diList, cai.getActionId(), dynamicCount);
                     //更新milestone
                     if(diList.size()>0) {
-                        msSet.remove("");
-                        Iterator<String> msit = msSet.iterator();
+                        Iterator<String> msit = msList.iterator();
                         while (msit.hasNext()) {
                             milestone += msit.next();
                             if (msit.hasNext()) {
@@ -106,7 +117,7 @@ public class TurnpageActionProcessor implements ActionProcessor{
                         this.dbService.saveMilestone(milestone, cai.getActionId());
                     }
                 }else {
-                    //判断断点
+                    //增量更新，判断断点
                     int gap = -1;
                     if (StringUtils.isNotBlank(milestone)) {
                         for (DynamicInfo di : diList) {

@@ -1,6 +1,6 @@
 package com.pab.framework.crawlerengine.util;
 
-import com.pab.framework.crawlerengine.constant.Global;
+import com.pab.framework.crawlercore.constant.Global;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.ResultItems;

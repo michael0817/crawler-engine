@@ -1,11 +1,33 @@
+server:
+  session-timeout: 1800
+#    tomcat:
+#        max-threads: 1000
+#        min-spare-threads: 30
+  port: 8080
+#    uri-encoding: utf-8
+#security:
+#  basic:
+#    enabled: false
+  tomcat:
+    accesslog:
+      buffered: true
+      directory: ./logs
+      enabled: true
+      file-date-format: .yyyy-MM-dd
+      pattern: common
+      prefix: access_log
+      rename-on-rotate: false
+      request-attributes-enabled: false
+      rotate: true
+      suffix: .log
+  servlet:
+    context-path: /crawler
 spring:
   profiles:
-    active: pro
+    active: dev
   devtools:
     restart:
       enabled: true
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
-  mapper-locations: mybatis/**/*Mapper.xml
-  typeAliasesPackage: com.pab.framework.**.domain

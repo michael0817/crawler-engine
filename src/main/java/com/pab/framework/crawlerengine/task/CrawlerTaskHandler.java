@@ -27,7 +27,7 @@ public class CrawlerTaskHandler implements TaskHandler {
     @Autowired
     private FlowProcessor flowProcessor;
 
-    @Scheduled(cron = "0 17 10 * * MON-FRI")
+    @Scheduled(cron = "0 0 8 * * MON-FRI")
     @Override
     public void taskRun() {
         threadFactory.execute(new Runnable() {
