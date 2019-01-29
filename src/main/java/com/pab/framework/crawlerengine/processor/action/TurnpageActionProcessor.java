@@ -9,8 +9,8 @@ import com.pab.framework.crawlerengine.enums.ActionTargetParamNameEnum;
 import com.pab.framework.crawlerengine.enums.ActionTargetParamTypeEnum;
 import com.pab.framework.crawlerdb.service.DbService;
 import com.pab.framework.crawlerengine.util.UrlUtil;
-import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
-import com.pab.framework.crawlerengine.vo.DynamicInfo;
+import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.model.DynamicInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.cookie.Cookie;
@@ -76,9 +76,9 @@ public class TurnpageActionProcessor implements ActionProcessor{
                         ,ActionTargetParamNameEnum.SAVE_TYPE.getLabel());
                 if(Global.CRAWLER_MILESTONE_TYPE_ALL.equalsIgnoreCase(milestoneSaveType)){
                     //全量更新，需要去重
-                    List msList = Arrays.asList(milestone.split(Global.CRAWLER_MILESTONE_SPLIT));
-                    if(msList.size()==1&&msList.get(0).equals("")){
-                        msList = new ArrayList();
+                    List msList = new ArrayList();
+                    if(StringUtils.isNotBlank(milestone)){
+                        msList = Arrays.asList(milestone.split(Global.CRAWLER_MILESTONE_SPLIT));
                     }
                     Set<String> msSet = new HashSet(msList);
                     Object[] array = diList.toArray();
@@ -131,7 +131,7 @@ public class TurnpageActionProcessor implements ActionProcessor{
                     //插入
                     this.dbService.updateDynamicInfos(diList, cai.getActionId(), dynamicCount);
                     //更新milestone
-                    if(gap>0) {
+                    if(dynamicCount>0) {
                         milestone = diList.get(0).getContent();
                         this.dbService.saveMilestone(milestone, cai.getActionId());
                     }
@@ -159,4 +159,5 @@ public class TurnpageActionProcessor implements ActionProcessor{
         }
         return false;
     }
+
 }

@@ -13,6 +13,7 @@ public class Global {
     public static final String DYNAMIC_ACTION_PREFIX = "[";
     public static final String DYNAMIC_ACTION_SUBFIX = "]";
     public static final String DYNAMIC_ACTION_KEYWORD = "action_id_";
+    public static final String DYNAMIC_ACTION_REGEX = "\\[action_id_\\d+\\]";
     public static final String CRAWLER_RESULT_SUCCESS = "S";
     public static final String CRAWLER_RESULT_FAILURE = "F";
     public static final String CRAWLER_RESULT_WARN = "W";

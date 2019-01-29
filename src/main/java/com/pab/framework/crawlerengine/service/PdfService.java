@@ -7,7 +7,7 @@ import com.pab.framework.crawlerdb.service.DbService;
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.enums.ActionTypeEnum;
 import com.pab.framework.crawlerengine.util.PdfUtil;
-import com.pab.framework.crawlerengine.vo.News;
+import com.pab.framework.crawlerengine.model.News;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,10 @@ public class PdfService {
         }catch (Exception e){
             log.error("PDF文件生成失败", e);
         }finally {
-            pdfUtil.closeDocument();
+            try {
+                pdfUtil.closeDocument();
+            }catch (Exception e) {
+            }
         }
         return true;
     }

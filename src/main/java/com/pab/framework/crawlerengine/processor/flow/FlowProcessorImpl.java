@@ -75,7 +75,5 @@ public class FlowProcessorImpl implements FlowProcessor {
                 }
             }
         }
-        pdfService.generateNewsFile();
-
     }
 }

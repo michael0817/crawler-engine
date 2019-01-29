@@ -2,7 +2,7 @@ package com.pab.framework.crawlerengine.crawler;
 
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.service.ProxyService;
-import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;

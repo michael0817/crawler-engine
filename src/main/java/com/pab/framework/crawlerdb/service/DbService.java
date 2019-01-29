@@ -4,8 +4,8 @@ import com.alibaba.fastjson.JSON;
 import com.pab.framework.crawlerdb.dao.*;
 import com.pab.framework.crawlerdb.domain.*;
 import com.pab.framework.crawlerengine.enums.ActionTypeEnum;
-import com.pab.framework.crawlerengine.vo.DynamicInfo;
-import com.pab.framework.crawlerengine.vo.News;
+import com.pab.framework.crawlerengine.model.DynamicInfo;
+import com.pab.framework.crawlerengine.model.News;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,8 +43,9 @@ public class DbService {
         for (int i = 0; i < gap; i++) {
             CrawlerActionDynamicInfo cadi = new CrawlerActionDynamicInfo();
             cadi.setActionId(actionId);
-            cadi.setArticle((diList.get(i)).getArticle());
-            cadi.setContent((diList.get(i)).getContent());
+            cadi.setArticleId((diList.get(i)).getId());
+            cadi.setArticleName((diList.get(i)).getArticle());
+            cadi.setArticleContent((diList.get(i)).getContent());
             cadi.setOrderNum(i + 1);
             cadi.setOperTime(date);
             this.crawlerActionDynamicInfoDao.save(cadi);
@@ -94,11 +95,12 @@ public class DbService {
 
     public String getMilestoneByActionId(int actionId) {
         try {
-            return this.crawlerMilestoneDao.findMilestoneByActionId(actionId);
+            String result = this.crawlerMilestoneDao.findMilestoneByActionId(actionId);
+            return result == null ? "" : result;
         } catch (Exception e) {
             log.error("SQL执行异常", e);
         }
-        return null;
+        return "";
     }
 
     public void saveMilestone(String milestone, int actionId) {

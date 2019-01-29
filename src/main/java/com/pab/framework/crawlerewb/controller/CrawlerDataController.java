@@ -3,6 +3,7 @@ package com.pab.framework.crawlerewb.controller;
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerdb.domain.CrawlerContent;
 import com.pab.framework.crawlerdb.service.DbService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/content")
+@Slf4j
 public class CrawlerDataController {
 
     @Autowired

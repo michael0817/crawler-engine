@@ -1,9 +1,10 @@
 package com.pab.framework.crawlerengine.crawler;
 
+import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
-import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
-import com.pab.framework.crawlerengine.vo.DynamicInfo;
+import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.model.DynamicInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
 
     private InheritableThreadLocal<Integer> urlType = new InheritableThreadLocal();
-    private InheritableThreadLocal<String> regex = new InheritableThreadLocal();
+    private InheritableThreadLocal<String[]> regex = new InheritableThreadLocal();
     private InheritableThreadLocal<List<Cookie>> cookies = new InheritableThreadLocal();
 
     @Autowired
@@ -30,7 +31,7 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
 
     public List<DynamicInfo> handler(CrawlerJobInfo crawlerJobInfo)
             throws Exception {
-        this.regex.set(crawlerJobInfo.getRegex());
+        this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
         this.urlType.set(crawlerJobInfo.getUrlType());
         Spider spider = Spider.create(this).thread(1);
         List<DynamicInfo> dynamicUrls = new ArrayList();
@@ -50,18 +51,18 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
         try {
             List<DynamicInfo> dynamicInfos = new ArrayList();
             if (this.urlType.get().intValue() == UrlTypeEnum.HTML.getLabel()) {
-                List<String> contents = page.getHtml().xpath(this.regex.get()).links().all();
-                List<String> articles = page.getHtml().xpath(this.regex.get() + "/text()").all();
+                List<String> ids = page.getHtml().xpath(this.regex.get()[0]).all();
+                List<String> articles = page.getHtml().xpath(this.regex.get()[1]).all();
+                List<String> contents = page.getHtml().xpath(this.regex.get()[2]).links().all();
                 for (int i = 0; i < (contents.size() > articles.size() ? contents.size() : articles.size()); i++) {
                     DynamicInfo dynamicInfo = new DynamicInfo();
+                    dynamicInfo.setId(ids.get(i));
                     dynamicInfo.setArticle(articles.get(i));
                     dynamicInfo.setContent(contents.get(i));
                     dynamicInfos.add(dynamicInfo);
                 }
-            } else if (this.urlType.get().intValue() != UrlTypeEnum.JSON.getLabel()) {
+            } else if (this.urlType.get().intValue() == UrlTypeEnum.JSON.getLabel()) {
             }
-
-
             page.putField(DynamicInfo.class.getName(), dynamicInfos);
         } catch (Exception e) {
             log.error("处理爬取内容失败:" + page.getUrl(), e);

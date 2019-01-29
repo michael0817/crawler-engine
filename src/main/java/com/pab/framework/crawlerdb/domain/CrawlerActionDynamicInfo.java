@@ -8,8 +8,9 @@ import java.util.Date;
 @Data
 public class CrawlerActionDynamicInfo extends BaseEntity {
     private int actionId;
-    private String article;
-    private String content;
+    private String articleId;
+    private String articleName;
+    private String articleContent;
     private int orderNum;
     private Date operTime;
 }

@@ -1,9 +1,8 @@
 package com.pab.framework.crawlerengine.crawler;
 
-import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
 import com.pab.framework.crawlerengine.util.HttpUtil;
-import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;

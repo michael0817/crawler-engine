@@ -25,11 +25,10 @@ public class ActionProcessorFactory {
         int actionType = cai.getActionType();
         if (ActionTypeEnum.TURNPAGE.getLabel() == actionType)
             return this.turnpageActionProcessor.actionHandler(cai);
-        if (ActionTypeEnum.COOKIE.getLabel() == actionType)
+        else if (ActionTypeEnum.COOKIE.getLabel() == actionType)
             return this.cookieActionProcessor.actionHandler(cai);
-        if (ActionTypeEnum.NEWS.getLabel() == actionType) {
+        else if (ActionTypeEnum.NEWS.getLabel() == actionType)
             return this.newsActionProcessor.actionHandler(cai);
-        }
         return false;
     }
 }

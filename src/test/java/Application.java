@@ -3,6 +3,7 @@ import com.pab.framework.crawlerengine.enums.FlowTypeEnum;
 import com.pab.framework.crawlerengine.processor.flow.FlowProcessor;
 import com.pab.framework.crawlerengine.service.PdfService;
 import com.pab.framework.crawlerengine.service.ProxyService;
+import com.pab.framework.crawlerengine.task.NewsTaskHandler;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +16,35 @@ import java.io.IOException;
 @SpringBootTest(classes = CrawlerEngineApplication.class)
 public class Application {
     @Autowired
-    private FlowProcessor flowProcessor;
+    private FlowProcessor flowProcessorImpl;
+    @Autowired
+    private NewsTaskHandler newsTaskHandler;
     @Autowired
     private ProxyService proxyConfig;
     @Autowired
     private PdfService pdfService;
 
     @Test
-    public void test() {
+    public void testNewsFlow() {
         try {
-            flowProcessor.run(FlowTypeEnum.NEWS);
+            flowProcessorImpl.run(FlowTypeEnum.NEWS);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void testMallFlow() {
+        try {
+            flowProcessorImpl.run(FlowTypeEnum.MALL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void testTask() {
+        newsTaskHandler.taskRun();
     }
 
     @Test

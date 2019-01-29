@@ -3,7 +3,7 @@ package com.pab.framework.crawlerengine.enums;
 public enum FlowTypeEnum {
 
     NEWS(1),
-    PRODUCT(2),
+    MALL(2),
     FINANCE(3);
 
     private int label;

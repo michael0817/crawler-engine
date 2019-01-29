@@ -3,7 +3,7 @@ package com.pab.framework.crawlerengine.crawler;
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerengine.enums.UrlTypeEnum;
 import com.pab.framework.crawlerengine.service.ProxyService;
-import com.pab.framework.crawlerengine.vo.CrawlerJobInfo;
+import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.cookie.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class CrawlerGetHandlerImpl implements CrawlerHandler {
 
     private InheritableThreadLocal<Integer> urlType = new InheritableThreadLocal();
-    private InheritableThreadLocal<String> regex = new InheritableThreadLocal();
+    private InheritableThreadLocal<String[]> regex = new InheritableThreadLocal();
     private InheritableThreadLocal<List<Cookie>> cookies = new InheritableThreadLocal();
 
     @Autowired
@@ -32,9 +32,9 @@ public class CrawlerGetHandlerImpl implements CrawlerHandler {
     public List<String> handler(CrawlerJobInfo crawlerJobInfo)
             throws Exception {
         List<String> htmlList = new ArrayList();
-        this.regex.set(crawlerJobInfo.getRegex());
+        this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
         this.urlType.set(crawlerJobInfo.getUrlType());
-        Spider spider = Spider.create(this).thread(4);
+        Spider spider = Spider.create(this).thread(8);
         List<ResultItems> resultItemsList = spider.getAll(crawlerJobInfo.getGetUrls());
         if ((resultItemsList == null) || (resultItemsList.size() == 0)) {
             log.error("没有可爬取的内容,regex:" + crawlerJobInfo.getRegex());
@@ -49,7 +49,11 @@ public class CrawlerGetHandlerImpl implements CrawlerHandler {
 
     public void process(Page page) {
         try {
-            page.putField(Global.CRAWLER_HTML, page.getHtml().xpath(this.regex.get()).all());
+            List<List<String>> contentList = new ArrayList<>();
+            for(String regex : this.regex.get()) {
+                contentList.add(page.getHtml().xpath(regex).all());
+            }
+            page.putField(Global.CRAWLER_HTML, contentList);
         } catch (Exception e) {
             log.error("处理爬取内容失败:" + page.getUrl(), e);
         }
@@ -58,7 +62,7 @@ public class CrawlerGetHandlerImpl implements CrawlerHandler {
 
     public Site getSite() {
         Site site = Site.me()
-                .setRetryTimes(10)
+                .setRetryTimes(1)
                 .setSleepTime(1000)
                 .setRetrySleepTime(1000)
                 .setTimeOut(5000)
@@ -78,14 +82,21 @@ public class CrawlerGetHandlerImpl implements CrawlerHandler {
         CrawlerJobInfo cji = new CrawlerJobInfo();
         List<String> urls = new ArrayList();
         //urls.add("https://ssl.mall.cmbchina.com/_CL5_/Category/GetAllCategories");
-        urls.add("https://ssl.mall.cmbchina.com/_CL5_/Category/GetCategories?id=5");
+        //urls.add("https://ssl.mall.cmbchina.com/_CL5_/Category/GetCategories?id=5");
+        for(int i = 1; i < 50; i++){
+            urls.add("https://ssl.mall.cmbchina" +
+                    ".com/_CL5_/Product/ProductListAjaxLoad?subCategory=370&navigationKey=&sort=70&pageIndex="+i);
+        }
         cji.setGetUrls(urls);
         cji.setUrlType(Integer.valueOf(UrlTypeEnum.HTML.getLabel()));
         //cji.setRegex("//div[@id='divC1Panel']//li");
-        cji.setRegex("//dl[@class='catalog_list']//dd");
-        List<String> htmlList = chi.handler(cji);
-        System.out.println(htmlList.size());
+        cji.setRegex("//div[@class='item-detail']/h4/text()" +
+                "||//div[@class='item-detail']//p[@class='clearfix']/span[@class='fl']/text()");
 
+        List<String> htmlList = chi.handler(cji);
+        for(String html : htmlList){
+            System.out.println(html);
+        }
 
 
     }

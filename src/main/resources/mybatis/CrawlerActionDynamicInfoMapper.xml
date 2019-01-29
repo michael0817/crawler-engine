@@ -5,11 +5,11 @@
         delete from crawler_action_dynamic_info where action_id=#{actionId}
     </delete>
     <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerActionDynamicInfo">
-        insert into crawler_action_dynamic_info(action_id,article,content,order_num,oper_time)
-        values (#{actionId},#{article},#{content},#{orderNum},#{operTime})
+        insert into crawler_action_dynamic_info(action_id,article_id,article_name,article_content,order_num,oper_time)
+        values (#{actionId},#{articleId},#{articleName},#{articleContent},#{orderNum},#{operTime})
     </insert>
     <select id="findDynamicContents" resultType="string" parameterType="int">
-        select content from crawler_action_dynamic_info where action_id=#{actionId}
+        select article_content from crawler_action_dynamic_info where action_id=#{actionId}
         order by order_num ASC
     </select>
 </mapper>
