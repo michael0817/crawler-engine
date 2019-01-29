@@ -26,19 +26,15 @@ import java.util.concurrent.TimeUnit;
 public class MallTaskHandler implements TaskHandler {
     @Autowired
     ExecutorService threadService;
-
+    @Autowired
+    private FlowProcessor flowProcessor;
 
     @Scheduled(cron = "0 0 4 * * MON")
     @Override
     public void taskRun() {
         try {
-            CrawlerTask task = new CrawlerTask(FlowTypeEnum.MALL);
-            FutureTask<Boolean> futureTask = new FutureTask(task);
-            threadService.submit(futureTask);
-            threadService.shutdown();
-            if(futureTask.get(60,TimeUnit.MINUTES)){
-                log.info("网上商城爬虫任务执行成功");
-            }
+            flowProcessor.run(FlowTypeEnum.MALL);
+            log.info("网上商城爬虫任务执行成功");
         } catch (Exception e){
             log.error("网上商城爬虫任务执行失败", e);
         }

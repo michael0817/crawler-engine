@@ -26,22 +26,17 @@ public class NewsTaskHandler implements TaskHandler {
     @Autowired
     ExecutorService threadService;
     @Autowired
-    PdfService pdfService;
+    private FlowProcessor flowProcessor;
     @Autowired
-    private FlowProcessor flowProcessorImpl;
+    PdfService pdfService;
 
-    @Scheduled(cron = "0 0 8 * * MON-FRI")
+    @Scheduled(cron = "0 47 17 * * MON-FRI")
     @Override
     public void taskRun() {
         try {
-            CrawlerTask task = new CrawlerTask(FlowTypeEnum.NEWS);
-            FutureTask<Boolean> futureTask = new FutureTask(task);
-            threadService.submit(futureTask);
-            threadService.shutdown();
-            if(futureTask.get(60,TimeUnit.MINUTES)){
-                pdfService.generateNewsFile();
-                log.info("新闻爬虫任务执行成功");
-            }
+            flowProcessor.run(FlowTypeEnum.NEWS);
+            pdfService.generateNewsFile();
+            log.info("新闻爬虫任务执行成功");
         } catch (Exception e){
             log.error("新闻爬虫任务执行失败", e);
         }

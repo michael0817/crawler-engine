@@ -33,8 +33,6 @@ public class FlowProcessorImpl implements FlowProcessor {
     @Autowired
     private DbService dbService;
     @Autowired
-    private PdfService pdfService;
-    @Autowired
     private ActionProcessorFactory actionProcessorFactory;
 
     public void run(FlowTypeEnum flowType) {
