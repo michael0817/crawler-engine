@@ -34,7 +34,7 @@ public class NewsTaskHandler implements TaskHandler {
     @Override
     public void taskRun() {
         try {
-            CrawlerTask task = new CrawlerTask();
+            CrawlerTask task = new CrawlerTask(FlowTypeEnum.NEWS);
             FutureTask<Boolean> futureTask = new FutureTask(task);
             threadService.submit(futureTask);
             threadService.shutdown();

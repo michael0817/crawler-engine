@@ -32,7 +32,7 @@ public class MallTaskHandler implements TaskHandler {
     @Override
     public void taskRun() {
         try {
-            CrawlerTask task = new CrawlerTask();
+            CrawlerTask task = new CrawlerTask(FlowTypeEnum.MALL);
             FutureTask<Boolean> futureTask = new FutureTask(task);
             threadService.submit(futureTask);
             threadService.shutdown();
