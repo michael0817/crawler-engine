@@ -1,14 +1,18 @@
 package com.pab.framework.crawlerengine.util;
 
-import com.pab.framework.crawlercore.constant.Global;
-
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.pab.framework.crawlercore.constant.Global;
+import com.pab.framework.crawlerengine.model.News;
+
 public final class CrawlerUtil {
 
-    public static void replaceDynamicContent(String urlPattern, List<String> contentList){
+	public static final Pattern pLink = Pattern.compile("(\\n|\\s|\\n\\s|\\s\\n)(<http|<https):\\/\\/[\\w\\-_]+(\\.[\\w\\-_]+)+([\\w\\-\\.,@?^=%&:/~\\+#]*[\\w\\-\\@?^=%&/~\\+#])?>(\\n)?");
+    
+	public static void replaceDynamicContent(String urlPattern, List<String> contentList){
         for(int i = 0; i < contentList.size(); i++){
             String url = urlPattern.replaceAll(Global.DYNAMIC_ACTION_REGEX, contentList.get(i));
             contentList.set(i, url);
@@ -29,7 +33,23 @@ public final class CrawlerUtil {
         return -1;
 
     }
-
+    
+    /*
+     * 替换content中超链接
+     */
+    public static void replaceHyperLink(List<News> content){
+		
+		for(int i=0;i<content.size();i++){
+			StringBuffer stringBuffer = new StringBuffer();
+			Matcher m  =  pLink.matcher(content.get(i).getContent().get(0));
+			while(m.find()){
+				m.appendReplacement(stringBuffer, "");
+			}
+			m.appendTail(stringBuffer);
+			content.get(i).setContent(Arrays.asList(stringBuffer.toString()));
+		}
+	}
+   
     public static void main(String[] args){
         getActionId("aaa[action_id_22]");
     }

@@ -67,6 +67,7 @@ public class NewsActionProcessor implements ActionProcessor{
                     +"")));
             List<News> newsList = (List)this.crawlerNewsHandlerImpl.handler(cji);
             if ((newsList != null) && (newsList.size() > 0)) {
+                CrawlerUtil.replaceHyperLink(newsList);
                 this.dbService.updateCrawlerNews(newsList, cai.getActionId());
             }
             //日志记录
