@@ -4,6 +4,8 @@ import com.pab.framework.crawlerdb.domain.CrawlerActionInfo;
 import com.pab.framework.crawlerdb.domain.CrawlerLog;
 import com.pab.framework.crawlerengine.cache.ICache;
 import com.pab.framework.crawlerengine.crawler.CrawlerHandler;
+import com.pab.framework.crawlerengine.enums.ActionTargetParamNameEnum;
+import com.pab.framework.crawlerengine.enums.ActionTargetParamTypeEnum;
 import com.pab.framework.crawlerdb.service.DbService;
 import com.pab.framework.crawlerengine.util.CrawlerUtil;
 import com.pab.framework.crawlerengine.model.CrawlerJobInfo;
@@ -15,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -66,7 +69,23 @@ public class NewsActionProcessor implements ActionProcessor{
             cji.setCookies((List<Cookie>)(this.localcache.getCache(this.dbService.getFlowIdByActionId(cai.getActionId())
                     +"")));
             List<News> newsList = (List)this.crawlerNewsHandlerImpl.handler(cji);
+            boolean flag = true;
             if ((newsList != null) && (newsList.size() > 0)) {
+            	//过滤关键字
+            	String filterKeyword = this.dbService.getActionTargetParamValue(cai.getActionId(),
+            			ActionTargetParamTypeEnum.FILTER.getLabel(),
+            			ActionTargetParamNameEnum.KEYWORD.getLabel());
+            	if(null != filterKeyword && "" != filterKeyword){
+            		Iterator<News> it = newsList.iterator();
+            		while(it.hasNext()){
+            			News news = it.next();
+            			if(!CrawlerUtil.filterKeyword(news, filterKeyword)){
+            				it.remove();
+            				flag = false;
+            			}
+            		}
+            	}
+            	//替换超链接
                 CrawlerUtil.replaceHyperLink(newsList);
                 this.dbService.updateCrawlerNews(newsList, cai.getActionId());
             }
@@ -84,8 +103,14 @@ public class NewsActionProcessor implements ActionProcessor{
                 cl.setActionId(cai.getActionId());
                 cl.setOperTime(new Date());
                 cl.setResultCode(Global.CRAWLER_RESULT_WARN);
-                cl.setResultMessage("爬取新闻总计" + newsList.size() + "条,失败" + (urlList.size() - newsList.size()) + "条");
-                log.warn("爬取新闻总计" + newsList.size() + "条,失败" + (urlList.size() - newsList.size()) + "条");
+                if(flag == true){
+                	cl.setResultMessage("爬取新闻总计" + newsList.size() + "条,失败" + (urlList.size() - newsList.size()) + "条");
+                    log.warn("爬取新闻总计" + newsList.size() + "条,失败" + (urlList.size() - newsList.size()) + "条");
+                }else{
+                	cl.setResultMessage("爬取新闻总计" + newsList.size() + "条,过滤" + (urlList.size() - newsList.size()) + "条");
+                    log.warn("爬取新闻总计" + newsList.size() + "条,过滤" + (urlList.size() - newsList.size()) + "条");
+                }
+                
             }
             this.dbService.saveLog(cl);
             return true;

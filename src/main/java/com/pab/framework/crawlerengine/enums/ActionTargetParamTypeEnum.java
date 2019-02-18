@@ -2,7 +2,8 @@ package com.pab.framework.crawlerengine.enums;
 
 public enum ActionTargetParamTypeEnum {
 
-    MILESTONE("MILESTONE");
+    MILESTONE("MILESTONE"),
+	FILTER("FILTER");
 
     private String label;
 

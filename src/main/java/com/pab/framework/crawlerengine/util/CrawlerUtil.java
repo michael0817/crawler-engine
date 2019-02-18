@@ -1,6 +1,8 @@
 package com.pab.framework.crawlerengine.util;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -50,6 +52,22 @@ public final class CrawlerUtil {
 		}
 	}
    
+    /*
+     * 内容，标题关键字过滤
+     */
+    public static boolean filterKeyword(News news,String keyword ){
+    	String[] keywords = keyword.split(",");
+    	String title = news.getTitle();
+    	String content = news.getContent().get(0);
+    	for(String key : keywords){
+    		if(title.contains(key) || content.contains(key)){
+    			return true;
+    	   }
+    	}
+       return false;
+    }
+    
+    
     public static void main(String[] args){
         getActionId("aaa[action_id_22]");
     }
