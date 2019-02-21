@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAutoConfiguration
 @EnableTransactionManagement
 @SpringBootApplication
-@MapperScan("com.pab.framework.crawlerdb.dao")
 @ComponentScan("com.pab.framework.**.*")
 @EnableCaching
 @Slf4j

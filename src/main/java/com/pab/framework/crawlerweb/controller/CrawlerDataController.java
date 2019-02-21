@@ -1,4 +1,4 @@
-package com.pab.framework.crawlerewb.controller;
+package com.pab.framework.crawlerweb.controller;
 
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerdb.domain.CrawlerContent;
