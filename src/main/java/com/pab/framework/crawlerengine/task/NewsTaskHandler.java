@@ -30,7 +30,7 @@ public class NewsTaskHandler implements TaskHandler {
     @Autowired
     PdfService pdfService;
 
-    @Scheduled(cron = "0 47 17 * * MON-FRI")
+    @Scheduled(cron = "0 0 8 * * MON-FRI")
     @Override
     public void taskRun() {
         try {
