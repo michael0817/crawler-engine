@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class DbService {
 
         return null;
     }
-
+    
     public String getFlowNameByActionId(int actionId) {
         try {
             int flowId = this.crawlerFlowDetailDao.findFlowIdByActionId(actionId);
@@ -133,13 +134,38 @@ public class DbService {
         deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(1));
         deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(2));
         deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(3));
-
-
     }
-
+    /*
+     * Mall
+     */
+    public void saveCrawlerMall(List<String> mallList, int actionId, LocalDate date) {
+    	for (String mall : mallList) {
+            CrawlerContent cc = new CrawlerContent();
+            cc.setActionId(actionId);
+            cc.setActionType(ActionTypeEnum.MALL.getLabel());
+            cc.setCrawlerDate(date);
+            cc.setContent(mall);
+            this.crawlerContentDao.save(cc);
+        }
+    }
+    
+    @Transactional
+    public void updateCrawlerMall(List<String> mallList,int actionId) {
+    	LocalDate date = LocalDate.now();
+    	saveCrawlerMall(mallList,actionId,date);
+    	deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(1));
+        deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(2));
+        deleteContentByActionIdAndCrawlerDate(actionId,date.minusMonths(3));
+    }
+    
     public void deleteContentByActionIdAndCrawlerDate(int actionId, LocalDate crawlerDate) {
         this.crawlerContentDao.deleteByActionIdAndCrawlerDate(actionId, crawlerDate);
 
+    }
+    
+    public void deleteContentByCrawlerDate() {
+    	LocalDate date = LocalDate.now();
+    	this.crawlerContentDao.deleteByCrawlerDate(date.minusDays(30)); 
     }
 
     public List<CrawlerContent> getContentByActionIdAndCrawlerDate(int actionId, LocalDate crawlerDate) {
@@ -152,6 +178,11 @@ public class DbService {
 
     public void saveLog(CrawlerLog cl) {
         this.crawlerLogDao.save(cl);
+    }
+    
+    public void deleteLogByCrawlerDateTime() {
+    	LocalDateTime dateTime = LocalDateTime.now();
+    	this.crawlerLogDao.deleteByCrawlerDateTime(dateTime.minusDays(30));
     }
 
     public String getActionTargetParamValue(int actionId, String paramType, String paramName){

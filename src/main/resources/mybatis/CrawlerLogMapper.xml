@@ -5,4 +5,7 @@
         insert into crawler_log(flow_id,action_id,oper_time,result_code,result_message)
         values (#{flowId},#{actionId},#{operTime},#{resultCode},#{resultMessage});
     </insert>
+    <delete id="deleteByCrawlerDateTime">
+        delete from crawler_log where oper_time &lt; #{crawlerDateTime}
+    </delete>
 </mapper>

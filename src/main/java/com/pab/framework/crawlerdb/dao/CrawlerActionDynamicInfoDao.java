@@ -13,4 +13,5 @@ public interface CrawlerActionDynamicInfoDao {
     int save(CrawlerActionDynamicInfo paramCrawlerActionDynamicInfo);
 
     List<String> findDynamicContents(int paramInt);
+    
 }

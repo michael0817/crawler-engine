@@ -34,11 +34,9 @@ public class CrawlerNewsHandlerImpl implements CrawlerHandler {
     public List<News> handler(CrawlerJobInfo crawlerJobInfo)
             throws Exception {
         List<News> newsList = new ArrayList();
-        this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
-        if (this.regex.get().length != 4) {
-            throw new Exception("xpath数量不正确:" + this.regex.get().length);
-        }
-        this.urlType.set(crawlerJobInfo.getUrlType());
+		this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
+		if (this.regex.get().length != 4) { throw new Exception("xpath数量不正确:" +
+		this.regex.get().length); } this.urlType.set(crawlerJobInfo.getUrlType());
         Spider spider = Spider.create(this).thread(4);
         List<ResultItems> resultItemsList = spider.getAll(crawlerJobInfo.getGetUrls());
         if ((resultItemsList == null) || (resultItemsList.size() == 0)) {
