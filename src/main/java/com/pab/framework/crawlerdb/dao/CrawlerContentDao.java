@@ -19,5 +19,6 @@ public interface CrawlerContentDao {
     List<CrawlerContent> findByActionTypeAndCrawlerDate(@Param("actionType")int actionType, @Param("crawlerDate")
             LocalDate
             crawlerDate);
+    int deleteByCrawlerDate(@Param("crawlerDate")LocalDate crawlerDate);
 
 }

@@ -4,6 +4,9 @@
     <delete id="deleteByActionIdAndCrawlerDate">
         delete from crawler_content where action_id=#{actionId} and crawler_date = #{crawlerDate}
     </delete>
+    <delete id="deleteByCrawlerDate">
+        delete from crawler_content where crawler_date &lt; #{crawlerDate}
+    </delete>
     <insert id="save" parameterType="com.pab.framework.crawlerdb.domain.CrawlerContent">
         insert into crawler_content(action_id, action_type, crawler_date, content)
         values  (#{actionId}, #{actionType}, #{crawlerDate},#{content})

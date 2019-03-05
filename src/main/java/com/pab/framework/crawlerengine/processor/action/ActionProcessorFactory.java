@@ -19,6 +19,8 @@ public class ActionProcessorFactory {
     private ActionProcessor turnpageActionProcessor;
     @Resource
     private ActionProcessor newsActionProcessor;
+    @Resource
+    private ActionProcessor mallActionProcessor;
 
 
     public boolean process(CrawlerActionInfo cai) {
@@ -29,6 +31,8 @@ public class ActionProcessorFactory {
             return this.cookieActionProcessor.actionHandler(cai);
         else if (ActionTypeEnum.NEWS.getLabel() == actionType)
             return this.newsActionProcessor.actionHandler(cai);
+        else if (ActionTypeEnum.MALL.getLabel() == actionType)
+        	return this.mallActionProcessor.actionHandler(cai);
         return false;
     }
 }

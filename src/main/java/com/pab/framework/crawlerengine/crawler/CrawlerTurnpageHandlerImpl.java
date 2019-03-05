@@ -14,6 +14,7 @@ import us.codecraft.webmagic.ResultItems;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.Spider;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,7 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
             throws Exception {
         this.regex.set(crawlerJobInfo.getRegex().split(Global.CRAWLER_REGEX_SPLIT1));
         this.urlType.set(crawlerJobInfo.getUrlType());
-        Spider spider = Spider.create(this).thread(1);
+        Spider spider = Spider.create(this).thread(5);
         List<DynamicInfo> dynamicUrls = new ArrayList();
         for (Object url : crawlerJobInfo.getGetUrls()) {
             ResultItems resultItems = spider.get((String) url);
@@ -53,12 +54,12 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
             if (this.urlType.get().intValue() == UrlTypeEnum.HTML.getLabel()) {
                 List<String> ids = page.getHtml().xpath(this.regex.get()[0]).all();
                 List<String> articles = page.getHtml().xpath(this.regex.get()[1]).all();
-                List<String> contents = page.getHtml().xpath(this.regex.get()[2]).links().all();
+                List<String> contents = page.getHtml().xpath(this.regex.get()[2]).all();
                 for (int i = 0; i < (contents.size() > articles.size() ? contents.size() : articles.size()); i++) {
                     DynamicInfo dynamicInfo = new DynamicInfo();
                     dynamicInfo.setId(ids.get(i));
                     dynamicInfo.setArticle(articles.get(i));
-                    dynamicInfo.setContent(contents.get(i));
+                    dynamicInfo.setContent(URLDecoder.decode(contents.get(i),"UTF-8"));
                     dynamicInfos.add(dynamicInfo);
                 }
             } else if (this.urlType.get().intValue() == UrlTypeEnum.JSON.getLabel()) {
