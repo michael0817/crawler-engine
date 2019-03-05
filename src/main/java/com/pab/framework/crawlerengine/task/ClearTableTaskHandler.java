@@ -23,7 +23,7 @@ public class ClearTableTaskHandler implements TaskHandler {
 	private DbService dbService;
 	
 	
-	@Scheduled(cron = "0 0 0 * * ?")
+	@Scheduled(cron = "0 0 0 * ? WED")
 	@Override
 	public void taskRun() {
 		try {
