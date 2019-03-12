@@ -6,7 +6,8 @@ public enum ActionTypeEnum {
     TURNPAGE(2),
     COOKIE(3),
     NEWS(4),
-	MALL(5);
+	MALL(5),
+	MALLTURNPAGE(6);
 
     private int label;
 

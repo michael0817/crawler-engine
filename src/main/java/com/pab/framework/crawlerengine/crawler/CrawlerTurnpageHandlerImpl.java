@@ -54,12 +54,12 @@ public class CrawlerTurnpageHandlerImpl implements CrawlerHandler {
             if (this.urlType.get().intValue() == UrlTypeEnum.HTML.getLabel()) {
                 List<String> ids = page.getHtml().xpath(this.regex.get()[0]).all();
                 List<String> articles = page.getHtml().xpath(this.regex.get()[1]).all();
-                List<String> contents = page.getHtml().xpath(this.regex.get()[2]).all();
+                List<String> contents = page.getHtml().xpath(this.regex.get()[2]).links().all();
                 for (int i = 0; i < (contents.size() > articles.size() ? contents.size() : articles.size()); i++) {
                     DynamicInfo dynamicInfo = new DynamicInfo();
                     dynamicInfo.setId(ids.get(i));
                     dynamicInfo.setArticle(articles.get(i));
-                    dynamicInfo.setContent(URLDecoder.decode(contents.get(i),"UTF-8"));
+                    dynamicInfo.setContent(contents.get(i));
                     dynamicInfos.add(dynamicInfo);
                 }
             } else if (this.urlType.get().intValue() == UrlTypeEnum.JSON.getLabel()) {

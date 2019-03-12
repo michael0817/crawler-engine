@@ -21,12 +21,16 @@ public class ActionProcessorFactory {
     private ActionProcessor newsActionProcessor;
     @Resource
     private ActionProcessor mallActionProcessor;
+    @Resource
+    private ActionProcessor mallturnpageActionProcessor;
 
 
     public boolean process(CrawlerActionInfo cai) {
         int actionType = cai.getActionType();
         if (ActionTypeEnum.TURNPAGE.getLabel() == actionType)
             return this.turnpageActionProcessor.actionHandler(cai);
+        else if(ActionTypeEnum.MALLTURNPAGE.getLabel() == actionType)
+        	return this.mallturnpageActionProcessor.actionHandler(cai);
         else if (ActionTypeEnum.COOKIE.getLabel() == actionType)
             return this.cookieActionProcessor.actionHandler(cai);
         else if (ActionTypeEnum.NEWS.getLabel() == actionType)
