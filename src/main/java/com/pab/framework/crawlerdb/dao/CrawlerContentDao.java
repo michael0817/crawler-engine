@@ -17,8 +17,12 @@ public interface CrawlerContentDao {
     List<CrawlerContent> findByActionIdAndCrawlerDate(@Param("actionId")int actionId, @Param("crawlerDate")LocalDate crawlerDate);
 
     List<CrawlerContent> findByActionTypeAndCrawlerDate(@Param("actionType")int actionType, @Param("crawlerDate")
-            LocalDate
-            crawlerDate);
+            LocalDate crawlerDate);
     int deleteByCrawlerDate(@Param("crawlerDate")LocalDate crawlerDate);
+    
+    List<CrawlerContent> findForPage(@Param("actionType")int actionType,@Param("crawlerDate") 
+            LocalDate crawlerDate,@Param("pageBegin")int pageBegin,@Param("pageCount")int pageCount);
+    
+    int CountNum(@Param("actionType")int actionType,@Param("crawlerDate")LocalDate crawlerDate);
 
 }

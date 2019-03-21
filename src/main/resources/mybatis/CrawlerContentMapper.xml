@@ -22,4 +22,16 @@
         where action_type = #{actionType}
         and crawler_date = #{crawlerDate}
     </select>
+    <select id="CountNum"  resultType="int">
+        select count(*) from crawler_content
+        where action_type = #{actionType}
+        and crawler_date = #{crawlerDate}        
+    </select>
+    <select id="findForPage" resultType="com.pab.framework.crawlerdb.domain.CrawlerContent">
+        select action_id, action_type, crawler_date, content from crawler_content
+        where action_type = #{actionType}
+        and crawler_date = #{crawlerDate}
+        order by action_id
+        limit #{pageBegin},#{pageCount}
+    </select>
 </mapper>
