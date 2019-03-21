@@ -28,5 +28,5 @@ public class Global {
     public static final String CRAWLER_MILESTONE_TYPE_NEWEST = "NEWEST";
     public static final String NEWS_PDF_FILE_NAME = "每日金融资讯";
     public static final String MALL_URL_SPLIT = "&title=";
-
+    public static final   int  CONTENT_PAGE_SIZE = 10;
 }

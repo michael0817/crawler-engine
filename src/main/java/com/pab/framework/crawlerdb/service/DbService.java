@@ -176,6 +176,15 @@ public class DbService {
         return this.crawlerContentDao.findByActionTypeAndCrawlerDate(actionType, crawlerDate);
     }
 
+    public List<CrawlerContent> getContentByActionTypeAndCrawlerDateForPage(int actionType, LocalDate crawlerDate
+    		,int pageBegin,int pageCount){
+    	return this.crawlerContentDao.findForPage(actionType, crawlerDate, pageBegin, pageCount);
+    }
+    
+    public int CountNum(int actionType,LocalDate crawlerDate) {
+    	return this.crawlerContentDao.CountNum(actionType, crawlerDate);
+    }
+    
     public void saveLog(CrawlerLog cl) {
         this.crawlerLogDao.save(cl);
     }

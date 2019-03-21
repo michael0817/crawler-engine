@@ -3,6 +3,8 @@ package com.pab.framework.crawlerweb.controller;
 import com.pab.framework.crawlercore.constant.Global;
 import com.pab.framework.crawlerdb.domain.CrawlerContent;
 import com.pab.framework.crawlerdb.service.DbService;
+import com.pab.framework.crawlerengine.model.ContentInfo;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,19 +40,50 @@ public class CrawlerDataController {
      * 下载爬虫数据
      * @param crawlerDate
      * @param actionType
+     * @param pageStart
+     * @param pageEnd
      * @return
      */
     @ResponseBody
-    @GetMapping("/sync/{crawlerDate}/{actionType}")
-    List<CrawlerContent> sync(@PathVariable("crawlerDate") String crawlerDate,
-                              @PathVariable("actionType") int actionType) {
+    @GetMapping("/sync/{crawlerDate}/{actionType}/{pageStart}/{pageEnd}")
+    public ContentInfo sync(@PathVariable("crawlerDate") String crawlerDate,
+                              @PathVariable("actionType") int actionType,
+                              @PathVariable("pageStart") int pageStart,
+                              @PathVariable("pageEnd") int pageEnd) { 
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd");
         LocalDate localDate = LocalDate.parse(crawlerDate,dtf);
-        return dbService.getContentByActionTypeAndCrawlerDate(actionType, localDate);
+        int totalCount = this.dbService.CountNum(actionType, localDate);
+        int totalPageNum = 0;
+        if(totalCount%(Global.CONTENT_PAGE_SIZE) == 0) {
+        	totalPageNum = totalCount/(Global.CONTENT_PAGE_SIZE);
+        }else if(totalCount%(Global.CONTENT_PAGE_SIZE) != 0) {
+        	totalPageNum = totalCount/(Global.CONTENT_PAGE_SIZE) + 1;
+        }
+        int start;
+        int count = 0;
+        if(pageStart > 0) {
+        	start = (pageStart-1) * (Global.CONTENT_PAGE_SIZE);
+        }else {
+        	start = 0;
+        }
+        ContentInfo contentInfo = new ContentInfo();
+        if(pageStart <= pageEnd) {
+        	if(pageEnd < totalPageNum) {
+        		count  = pageEnd * (Global.CONTENT_PAGE_SIZE) - start;
+        	}else if(pageEnd >= totalPageNum) {
+        		count = totalCount - start;
+        	}
+        	List<CrawlerContent> contentList =  dbService.getContentByActionTypeAndCrawlerDateForPage(actionType, localDate, start, count);
+        	contentInfo.setTotalCount(totalCount);
+        	contentInfo.setCrawlerContent(contentList);
+        	contentInfo.setTotalPageNum(totalPageNum);
+        	contentInfo.setPagePerNum(Global.CONTENT_PAGE_SIZE);
+        }
+        return contentInfo;
     }
 
     /**
-     * 下载新闻pdf
+              *下载新闻pdf
      * @param crawlerDate
      * @param request
      * @param response
