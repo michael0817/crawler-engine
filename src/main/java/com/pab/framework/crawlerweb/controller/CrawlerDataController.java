@@ -61,16 +61,12 @@ public class CrawlerDataController {
         }
         int start;
         int count = 0;
-        if(pageStart > 0) {
-        	start = (pageStart-1) * (Global.CONTENT_PAGE_SIZE);
-        }else {
-        	start = 0;
-        }
+        start = pageStart * (Global.CONTENT_PAGE_SIZE);
         ContentInfo contentInfo = new ContentInfo();
         if(pageStart <= pageEnd) {
         	if(pageEnd < totalPageNum) {
         		count  = pageEnd * (Global.CONTENT_PAGE_SIZE) - start;
-        	}else if(pageEnd >= totalPageNum) {
+        	}else{
         		count = totalCount - start;
         	}
         	List<CrawlerContent> contentList =  dbService.getContentByActionTypeAndCrawlerDateForPage(actionType, localDate, start, count);
