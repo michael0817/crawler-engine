@@ -29,7 +29,7 @@ public class MallTaskHandler implements TaskHandler {
     @Autowired
     private FlowProcessor flowProcessor;
 
-    @Scheduled(cron = "0 0 4 * * MON")
+    @Scheduled(cron = "0 0 6 * * FRI")
     @Override
     public void taskRun() {
         try {
